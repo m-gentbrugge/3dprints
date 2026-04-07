@@ -44,15 +44,6 @@
       "pricePerKg": 22,
       "photoUrl": "",
       "outOfStock": false
-    },
-    {
-      "id": "6",
-      "material": "PETG",
-      "colorName": "Zwart",
-      "colorHex": "#2d2d2d",
-      "pricePerKg": 22,
-      "photoUrl": "",
-      "outOfStock": false
     }
   ],
   "settings": {
