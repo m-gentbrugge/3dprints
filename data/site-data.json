@@ -53,15 +53,6 @@
       "pricePerKg": 22,
       "photoUrl": "",
       "outOfStock": false
-    },
-    {
-      "id": "7",
-      "material": "TPU",
-      "colorName": "Wit",
-      "colorHex": "#f0f0f0",
-      "pricePerKg": 30,
-      "photoUrl": "",
-      "outOfStock": false
     }
   ],
   "settings": {
