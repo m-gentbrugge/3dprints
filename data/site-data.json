@@ -65,7 +65,7 @@
     }
   ],
   "settings": {
-    "minPrice": 2.5,
+    "minPrice": 5,
     "email": "",
     "name": "",
     "bannerImg": ""
