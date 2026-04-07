@@ -26,15 +26,6 @@
       "pricePerKg": 18,
       "photoUrl": "",
       "outOfStock": false
-    },
-    {
-      "id": "4",
-      "material": "PLA",
-      "colorName": "Blauw",
-      "colorHex": "#2563eb",
-      "pricePerKg": 18,
-      "photoUrl": "",
-      "outOfStock": false
     }
   ],
   "settings": {
