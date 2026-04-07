@@ -1,0 +1,73 @@
+{
+  "filaments": [
+    {
+      "id": "1",
+      "material": "PLA",
+      "colorName": "Wit",
+      "colorHex": "#FFFFFF",
+      "pricePerKg": 18,
+      "photoUrl": "",
+      "outOfStock": false
+    },
+    {
+      "id": "2",
+      "material": "PLA",
+      "colorName": "Zwart",
+      "colorHex": "#1a1a1a",
+      "pricePerKg": 18,
+      "photoUrl": "",
+      "outOfStock": false
+    },
+    {
+      "id": "3",
+      "material": "PLA",
+      "colorName": "Rood",
+      "colorHex": "#e63946",
+      "pricePerKg": 18,
+      "photoUrl": "",
+      "outOfStock": false
+    },
+    {
+      "id": "4",
+      "material": "PLA",
+      "colorName": "Blauw",
+      "colorHex": "#2563eb",
+      "pricePerKg": 18,
+      "photoUrl": "",
+      "outOfStock": false
+    },
+    {
+      "id": "5",
+      "material": "PETG",
+      "colorName": "Transparant",
+      "colorHex": "#cce5f0",
+      "pricePerKg": 22,
+      "photoUrl": "",
+      "outOfStock": false
+    },
+    {
+      "id": "6",
+      "material": "PETG",
+      "colorName": "Zwart",
+      "colorHex": "#2d2d2d",
+      "pricePerKg": 22,
+      "photoUrl": "",
+      "outOfStock": false
+    },
+    {
+      "id": "7",
+      "material": "TPU",
+      "colorName": "Wit",
+      "colorHex": "#f0f0f0",
+      "pricePerKg": 30,
+      "photoUrl": "",
+      "outOfStock": false
+    }
+  ],
+  "settings": {
+    "minPrice": 2.5,
+    "email": "",
+    "name": "",
+    "bannerImg": ""
+  }
+}
