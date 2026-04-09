@@ -1,0 +1,1122 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3D Print Prijscalculator — Gentbrugge</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --accent:#f97316;--accent-d:#ea6c0a;--accent-bg:#fff7ed;
+  --bg:#f8fafc;--card:#fff;--text:#0f172a;--muted:#64748b;--border:#e2e8f0;
+  --r:12px;--rs:8px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+a{color:inherit}
+
+/* ── Loading overlay ── */
+#loading-overlay{position:fixed;inset:0;background:rgba(15,23,42,.85);z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;color:#fff}
+.spinner{width:40px;height:40px;border:3px solid rgba(255,255,255,.2);border-top-color:#f97316;border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+#loading-overlay p{font-size:.9rem;color:#94a3b8}
+
+/* ── Header / banner ── */
+header{background:#0f172a;color:#fff;padding:0 1.5rem;display:flex;align-items:center;height:90px;position:sticky;top:0;z-index:50;background-size:cover;background-position:center;overflow:hidden}
+header::before{content:'';position:absolute;inset:0;background:rgba(15,23,42,.74);z-index:0}
+header>*{position:relative;z-index:1}
+.logo-wrap{flex:1;text-align:center}
+.logo-text{font-family:'Rajdhani',sans-serif;font-size:1.55rem;font-weight:700;letter-spacing:.08em;line-height:1.15;text-transform:uppercase}
+.logo-sub{font-size:.75rem;color:#94a3b8;font-weight:400;margin-top:2px}
+.hdr-right{flex-shrink:0}
+.admin-btn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;padding:7px 14px;border-radius:7px;cursor:pointer;font-size:.82rem;font-family:'DM Sans',sans-serif;transition:.2s;display:flex;align-items:center;gap:6px}
+.admin-btn:hover{background:rgba(255,255,255,.22)}
+
+/* ── Main ── */
+.main{max-width:880px;margin:0 auto;padding:1.75rem 1rem 3rem}
+
+/* ── Notice ── */
+.notice{background:var(--accent-bg);border:1px solid #fed7aa;border-left:4px solid var(--accent);border-radius:var(--rs);padding:.9rem 1.1rem;margin-bottom:1.5rem;display:flex;gap:10px}
+.notice p{font-size:.875rem;line-height:1.7;color:#92400e}
+.notice strong{color:#78350f}
+.page-title{font-family:'Rajdhani',sans-serif;font-size:1.9rem;font-weight:700;letter-spacing:.02em;margin-bottom:.2rem}
+.page-sub{color:var(--muted);font-size:.9rem;margin-bottom:.7rem}
+.hier-line{font-size:.88rem;color:var(--muted);margin-bottom:1.5rem;line-height:1.6}
+.hier-a{color:var(--accent);font-weight:700;text-decoration:underline;cursor:pointer}
+.hier-a:hover{color:var(--accent-d)}
+
+/* ── Step card ── */
+.step-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:1.4rem;margin-bottom:1.1rem}
+.step-hdr{display:flex;align-items:center;gap:10px;margin-bottom:1.1rem}
+.step-num{width:30px;height:30px;background:var(--accent);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.95rem;flex-shrink:0;transition:.3s}
+.step-num.done{background:#16a34a}
+.step-lbl{font-family:'Rajdhani',sans-serif;font-size:1.05rem;font-weight:600;letter-spacing:.04em}
+
+/* ── Weight rows ── */
+.wgt-rows{display:flex;flex-direction:column;gap:8px;margin-bottom:4px}
+.wgt-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.wgt-row input[type="number"]{width:108px;padding:8px 10px;border:1.5px solid var(--border);border-radius:var(--rs);font-size:.95rem;font-family:'DM Sans',sans-serif;outline:none;transition:.2s}
+.wgt-row input[type="number"]:focus{border-color:var(--accent)}
+.wgt-unit{font-size:.85rem;color:var(--muted);font-weight:500}
+.wgt-sep{font-size:.8rem;color:var(--muted)}
+.qty-lbl{font-size:.82rem;color:var(--muted)}
+.qty-spin{width:68px;padding:8px 8px;border:1.5px solid var(--border);border-radius:var(--rs);font-size:.95rem;font-family:'DM Sans',sans-serif;outline:none;transition:.2s}
+.qty-spin:focus{border-color:var(--accent)}
+.rm-row-btn{width:28px;height:28px;border:1.5px solid var(--border);border-radius:6px;background:#fff;cursor:pointer;color:#94a3b8;font-size:15px;display:flex;align-items:center;justify-content:center;transition:.2s;flex-shrink:0}
+.rm-row-btn:hover{border-color:#ef4444;color:#ef4444}
+.add-row-btn{margin-top:8px;display:inline-flex;align-items:center;gap:5px;padding:6px 13px;border:1.5px dashed var(--border);border-radius:var(--rs);background:transparent;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.82rem;color:var(--muted);transition:.2s}
+.add-row-btn:hover{border-color:var(--accent);color:var(--accent)}
+.divider{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:.82rem;margin:1.1rem 0}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border)}
+.url-row{display:flex;gap:8px}
+.url-input{flex:1;padding:9px 11px;border:1.5px solid var(--border);border-radius:var(--rs);font-size:.88rem;font-family:'DM Sans',sans-serif;outline:none;transition:.2s}
+.url-input:focus{border-color:var(--accent)}
+.url-note{font-size:.82rem;color:var(--muted);margin-bottom:7px}
+.url-status{margin-top:7px;font-size:.83rem;padding:7px 11px;border-radius:var(--rs);display:none}
+.url-status.loading{background:#eff6ff;color:#1d4ed8}
+.url-status.ok{background:#f0fdf4;color:#15803d}
+.url-status.err{background:#fef2f2;color:#dc2626}
+
+/* ── Color qty buttons ── */
+.cqty-row{display:flex;gap:10px;flex-wrap:wrap}
+.cqty-btn{width:68px;height:68px;border:2px solid var(--border);border-radius:var(--rs);background:var(--bg);cursor:pointer;font-family:'Rajdhani',sans-serif;font-size:1.7rem;font-weight:700;color:var(--muted);transition:.2s;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px}
+.cqty-btn .lbl{font-size:.58rem;font-weight:500;font-family:'DM Sans',sans-serif;text-transform:uppercase;letter-spacing:.05em;line-height:1}
+.cqty-btn:hover,.cqty-btn.sel{border-color:var(--accent);background:var(--accent-bg);color:var(--accent)}
+
+/* ── Filament info note ── */
+.fil-note{font-size:.83rem;color:#475569;margin-bottom:.9rem;line-height:1.65;background:#f1f5f9;border-radius:var(--rs);padding:.65rem .9rem;border-left:3px solid #94a3b8}
+
+/* ── Filament info toggle ── */
+.fil-info-toggle{display:inline-flex;align-items:center;gap:8px;background:#f1f5f9;border:2px solid #cbd5e1;border-radius:var(--rs);padding:9px 16px;font-family:'DM Sans',sans-serif;font-size:.92rem;font-weight:500;cursor:pointer;color:#334155;transition:.2s;margin-bottom:1rem}
+.fil-info-toggle:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-bg)}
+.fil-info-panel{display:none;margin-bottom:1rem;overflow-x:auto}
+.fil-info-panel.open{display:block}
+.fil-tbl{width:100%;border-collapse:collapse;font-size:.79rem;min-width:520px}
+.fil-tbl th{background:#0f172a;color:#e2e8f0;padding:7px 10px;text-align:left;font-weight:600;font-family:'Rajdhani',sans-serif;font-size:.85rem;letter-spacing:.04em}
+.fil-tbl td{padding:7px 10px;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.5}
+.fil-tbl tr:nth-child(even) td{background:#f8fafc}
+.fil-tbl td:first-child{font-weight:500;color:#334155;width:160px}
+
+/* ── Color slots ── */
+.color-slots{display:flex;flex-direction:column;gap:1rem}
+.color-slot{border:1.5px solid var(--border);border-radius:var(--rs);overflow:hidden}
+.slot-hdr{background:#f1f5f9;padding:.6rem 1rem;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border)}
+.slot-badge{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.85rem;color:#fff;flex-shrink:0}
+.slot-title{font-size:.88rem;font-weight:500}
+.slot-chosen{margin-left:auto;display:flex;align-items:center;gap:6px;font-size:.8rem;color:var(--muted)}
+.slot-chosen-dot{width:13px;height:13px;border-radius:50%;border:1px solid rgba(0,0,0,.15)}
+.slot-body{padding:.9rem}
+
+/* ── Material type cards ── */
+.type-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:9px}
+.type-card{border:2px solid var(--border);border-radius:var(--rs);padding:.8rem .6rem;cursor:pointer;transition:.2s;text-align:center;background:var(--bg)}
+.type-card:hover{border-color:var(--accent);background:var(--accent-bg)}
+.type-name{font-family:'Rajdhani',sans-serif;font-size:1.6rem;font-weight:700;color:var(--accent);line-height:1}
+.type-dots{display:flex;gap:4px;justify-content:center;margin-top:6px;flex-wrap:wrap}
+.type-dot{width:12px;height:12px;border-radius:50%;border:1px solid rgba(0,0,0,.12)}
+.type-cnt{font-size:.72rem;color:var(--muted);margin-top:5px}
+
+/* ── Back button ── */
+.back-btn{display:inline-flex;align-items:center;gap:5px;background:transparent;border:1.5px solid var(--border);border-radius:var(--rs);padding:5px 11px;font-family:'DM Sans',sans-serif;font-size:.8rem;color:var(--muted);cursor:pointer;margin-bottom:.7rem;transition:.2s}
+.back-btn:hover{border-color:var(--accent);color:var(--accent)}
+
+/* ── Filament pick grid ── */
+.fil-pick-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px}
+.fp-card{border:2px solid var(--border);border-radius:var(--rs);padding:.65rem .45rem;cursor:pointer;transition:.2s;text-align:center;background:var(--bg);position:relative}
+.fp-card:hover{border-color:var(--accent)}
+.fp-card.sel{border-color:var(--accent);background:var(--accent-bg)}
+.fp-card.oos{opacity:.65}
+.fp-swatch{width:40px;height:40px;border-radius:50%;margin:0 auto 5px;border:2px solid rgba(0,0,0,.1)}
+.fp-mat{font-family:'Rajdhani',sans-serif;font-size:.95rem;font-weight:700;color:var(--accent)}
+.fp-name{font-size:.72rem;font-weight:500;color:var(--text);margin-top:1px}
+.fp-oos-badge{display:none;font-size:.65rem;background:#fef2f2;color:#dc2626;border:1px solid #fca5a5;border-radius:4px;padding:2px 5px;margin-top:4px}
+.fp-card.oos .fp-oos-badge{display:block}
+.fp-check{position:absolute;top:4px;right:4px;width:16px;height:16px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:9px;font-weight:700}
+
+/* OOS warning */
+.oos-warning{margin-top:.6rem;background:#fff7ed;border:1px solid #fed7aa;border-left:3px solid #f97316;border-radius:var(--rs);padding:.55rem .8rem;font-size:.8rem;color:#92400e;display:none}
+.oos-warning.show{display:block}
+
+/* Photo preview */
+.fil-preview{margin-top:.7rem;display:flex;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--border);border-radius:var(--rs);padding:.5rem .9rem .5rem .5rem}
+.fil-preview img{width:52px;height:52px;border-radius:7px;object-fit:cover;flex-shrink:0}
+.fil-preview-swatch{width:52px;height:52px;border-radius:7px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.fil-preview-info .nm{font-weight:500;font-size:.85rem}
+.fil-preview-info .sb{font-size:.75rem;color:var(--muted)}
+
+/* ── Buttons ── */
+.btn{padding:9px 17px;border-radius:var(--rs);font-family:'DM Sans',sans-serif;font-size:.88rem;font-weight:500;cursor:pointer;transition:.2s;border:none}
+.btn-p{background:var(--accent);color:#fff}
+.btn-p:hover{background:var(--accent-d)}
+.btn-s{background:var(--bg);color:var(--text);border:1.5px solid var(--border)}
+.btn-s:hover{border-color:var(--accent);color:var(--accent)}
+.btn-sm{padding:6px 12px;font-size:.8rem}
+
+/* ── Price result ── */
+.price-box{background:#0f172a;border-radius:var(--r);padding:2rem 1.75rem;color:#fff;text-align:center;margin-top:1.1rem}
+.price-lbl{font-size:.78rem;color:#94a3b8;text-transform:uppercase;letter-spacing:.1em;margin-bottom:.4rem}
+.price-amt{font-family:'Rajdhani',sans-serif;font-size:3.8rem;font-weight:700;color:var(--accent);line-height:1;margin-bottom:.2rem}
+.price-min-badge{display:none;background:rgba(249,115,22,.15);color:#fed7aa;border:1px solid rgba(249,115,22,.3);border-radius:20px;padding:3px 12px;font-size:.78rem;margin:.3rem 0}
+
+/* Summary table */
+.summary-wrap{margin-top:1.1rem;text-align:left}
+.summary-title{font-size:.73rem;color:#94a3b8;text-transform:uppercase;letter-spacing:.1em;margin-bottom:.65rem;text-align:center}
+.sum-tbl{width:100%;border-collapse:collapse;font-size:.82rem}
+.sum-tbl th{background:#1e293b;color:#94a3b8;padding:6px 10px;font-weight:500;font-size:.73rem;text-transform:uppercase;letter-spacing:.06em}
+.sum-tbl td{padding:7px 10px;border-bottom:1px solid #1e293b;color:#e2e8f0;vertical-align:middle}
+.sum-tbl tr:last-child td{border-bottom:none}
+.sum-dot{width:12px;height:12px;border-radius:50%;display:inline-block;border:1.5px solid rgba(255,255,255,.2);vertical-align:middle;margin-right:5px}
+.sum-total-row td{background:#0d1a2e;font-weight:600;color:#f97316}
+
+/* Shipping */
+.ship-block{margin-top:1.2rem;padding-top:1.2rem;border-top:1px solid #1e293b}
+.ship-title{font-size:.73rem;color:#94a3b8;text-transform:uppercase;letter-spacing:.1em;margin-bottom:.7rem;text-align:center}
+.ship-opts{display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap}
+.ship-card{background:#1e293b;border:1px solid #334155;border-radius:var(--rs);padding:.7rem 1rem;min-width:148px;text-align:center}
+.ship-ico{font-size:1.2rem;margin-bottom:3px}
+.ship-name{font-size:.8rem;font-weight:500;color:#e2e8f0}
+.ship-price{font-family:'Rajdhani',sans-serif;font-size:1.25rem;font-weight:700;color:var(--accent);margin-top:3px}
+.ship-price.free{color:#4ade80}
+.ship-note{font-size:.68rem;color:#64748b;margin-top:2px}
+
+/* CTA / email button */
+.price-cta{margin-top:1.2rem;padding-top:1.2rem;border-top:1px solid #1e293b}
+.price-cta p{font-size:.82rem;color:#94a3b8;margin-bottom:.9rem}
+.email-btn{display:block;width:100%;background:var(--accent);color:#fff;padding:18px 24px;border-radius:var(--rs);font-weight:700;text-decoration:none;font-size:2rem;font-family:'Rajdhani',sans-serif;letter-spacing:.04em;transition:.2s;text-align:center}
+.email-btn:hover{background:var(--accent-d)}
+
+/* ── Empty ── */
+.empty{text-align:center;padding:1.5rem;color:var(--muted);font-size:.87rem}
+.empty-icon{font-size:2rem;margin-bottom:.35rem}
+
+/* ── Login ── */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:200;align-items:center;justify-content:center}
+.overlay.open{display:flex}
+.login-box{background:#fff;border-radius:var(--r);padding:1.75rem;width:310px}
+.login-box h3{font-family:'Rajdhani',sans-serif;font-size:1.15rem;font-weight:700;margin-bottom:.9rem}
+.login-box input{width:100%;padding:9px 11px;border:1.5px solid var(--border);border-radius:var(--rs);font-size:.95rem;font-family:'DM Sans',sans-serif;outline:none;margin-bottom:10px;transition:.2s}
+.login-box input:focus{border-color:var(--accent)}
+.login-err{color:#dc2626;font-size:.82rem;margin-bottom:7px;display:none}
+.login-acts{display:flex;gap:8px;justify-content:flex-end}
+
+/* ── Admin ── */
+.admin-wrap{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:150;overflow-y:auto}
+.admin-wrap.open{display:block}
+.admin-panel{background:#fff;max-width:860px;margin:1.5rem auto;border-radius:var(--r);overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.2)}
+.admin-hdr{background:#0f172a;color:#fff;padding:1.1rem 1.4rem;display:flex;align-items:center;justify-content:space-between}
+.admin-hdr h2{font-family:'Rajdhani',sans-serif;font-size:1.2rem;font-weight:700;letter-spacing:.06em}
+.close-btn{background:rgba(255,255,255,.12);border:none;color:#fff;width:30px;height:30px;border-radius:6px;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center}
+.close-btn:hover{background:rgba(255,255,255,.22)}
+.admin-body{padding:1.4rem}
+.a-sec{margin-bottom:2rem}
+.a-sec-title{font-family:'Rajdhani',sans-serif;font-size:1.05rem;font-weight:700;margin-bottom:.85rem;padding-bottom:.45rem;border-bottom:2px solid var(--border);letter-spacing:.04em}
+.f-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(175px,1fr));gap:10px;margin-bottom:10px}
+.f-field{display:flex;flex-direction:column;gap:3px}
+.f-field label{font-size:.75rem;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.f-field input{padding:7px 9px;border:1.5px solid var(--border);border-radius:var(--rs);font-size:.88rem;font-family:'DM Sans',sans-serif;outline:none;transition:.2s}
+.f-field input:focus{border-color:var(--accent)}
+.cpr{display:flex;align-items:center;gap:7px}
+.cpr input[type="color"]{width:38px;height:34px;padding:2px;border-radius:5px;border:1.5px solid var(--border);cursor:pointer}
+.cpr input[type="text"]{flex:1}
+.add-form{background:var(--bg);border:1px solid var(--border);border-radius:var(--rs);padding:1rem;margin-bottom:.9rem}
+.add-form-title{font-weight:500;font-size:.88rem;margin-bottom:10px;color:var(--text)}
+.add-acts{display:flex;gap:7px;margin-top:6px}
+
+/* Filament list with drag */
+.fil-list{display:flex;flex-direction:column;gap:7px;margin-bottom:.5rem}
+.fil-item{display:flex;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--border);border-radius:var(--rs);padding:.65rem .9rem;cursor:default;transition:background .15s}
+.fil-item.drag-over{background:#f0fdf4;border-color:#16a34a}
+.drag-handle{cursor:grab;color:#cbd5e1;font-size:1.1rem;flex-shrink:0;padding:0 3px;user-select:none;touch-action:none}
+.drag-handle:active{cursor:grabbing}
+.fil-sw{width:34px;height:34px;border-radius:50%;border:2px solid rgba(0,0,0,.1);flex-shrink:0}
+.fil-info{flex:1}
+.fil-nm{font-weight:500;font-size:.87rem}
+.fil-mt{font-size:.77rem;color:var(--muted)}
+.fil-acts{display:flex;gap:5px;align-items:center}
+.oos-toggle{font-size:.72rem;padding:4px 8px;border-radius:5px;border:1.5px solid var(--border);background:#fff;cursor:pointer;font-family:'DM Sans',sans-serif;transition:.2s;white-space:nowrap}
+.oos-toggle.in-stock{border-color:#16a34a;color:#16a34a;background:#f0fdf4}
+.oos-toggle.out-stock{border-color:#dc2626;color:#dc2626;background:#fef2f2}
+.icon-btn{width:29px;height:29px;border-radius:6px;border:1.5px solid var(--border);background:#fff;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;transition:.2s}
+.icon-btn:hover{border-color:var(--accent)}
+.icon-btn.del:hover{border-color:#ef4444;color:#ef4444}
+
+/* Switch */
+.sw-wrap{display:flex;align-items:center;gap:8px;margin-top:4px}
+.sw{width:36px;height:20px;border-radius:10px;background:#cbd5e1;cursor:pointer;position:relative;transition:.2s;border:none;flex-shrink:0}
+.sw::after{content:'';position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:#fff;transition:.2s}
+.sw.on{background:#16a34a}
+.sw.on::after{left:18px}
+.sw-lbl{font-size:.82rem;color:var(--muted)}
+
+.sgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(195px,1fr));gap:10px;margin-bottom:1.3rem}
+.tip{font-size:.74rem;color:var(--muted);margin-top:2px}
+.banner-preview{width:100%;max-height:80px;border-radius:var(--rs);border:1.5px solid var(--border);object-fit:cover;display:none;margin-top:6px}
+.banner-preview.show{display:block}
+
+.save-status{font-size:.78rem;color:#16a34a;margin-left:8px;display:none}
+.save-status.show{display:inline}
+.save-status.err{color:#dc2626}
+
+@media(max-width:600px){
+  .main{padding:1rem .75rem 2rem}
+  .price-amt{font-size:2.8rem}
+  .email-btn{font-size:1.5rem;padding:14px 18px}
+  .ship-opts{flex-direction:column;align-items:center}
+  .admin-panel{margin:.5rem;border-radius:var(--rs)}
+  .wgt-row{gap:5px}
+}
+</style>
+</head>
+<body>
+
+<!-- Loading overlay -->
+<div id="loading-overlay">
+  <div class="spinner"></div>
+  <p>Gegevens laden…</p>
+</div>
+
+<!-- Header -->
+<header id="main-header">
+  <div class="logo-wrap">
+    <div class="logo-text">LAAT JE 3D BESTAND PRINTEN TE GENTBRUGGE</div>
+    <div class="logo-sub" id="header-name-el"></div>
+  </div>
+  <div class="hdr-right">
+    <button class="admin-btn" onclick="openAdmin()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 010 14.14M4.93 4.93a10 10 0 000 14.14"/></svg>
+      Beheer
+    </button>
+  </div>
+</header>
+
+<main class="main">
+
+  <div class="notice">
+    <div style="font-size:18px;flex-shrink:0;margin-top:2px">ℹ️</div>
+    <p>Dit is een automatisch gegenereerde schatting van de printkost op basis van materiaal, gewicht en verwerking. Stuur altijd een mailtje ter bevestiging van de prijs via de e-mail knop onderaan de pagina. Vergeet niet om de link naar het 3d-model door te sturen in de email en zet er eventueel opmerkingen bij voor de print.</p>
+  </div>
+
+  <div class="page-title">Bereken je printprijs</div>
+  <p class="page-sub">Volg de stappen hieronder voor een snelle prijsindicatie.</p>
+  <p class="hier-line">Indien u niet via deze toepassing tot een duidelijke offerte kunt komen, klik dan
+    <a id="hier-link" href="#" class="hier-a">HIER</a>
+    om meteen een mail te sturen met alle info over het project dat u wenst te printen.
+  </p>
+
+  <!-- STAP 1 -->
+  <div class="step-card">
+    <div class="step-hdr">
+      <div class="step-num" id="n1">1</div>
+      <div class="step-lbl">Gewicht &amp; aantal exemplaren</div>
+    </div>
+    <div class="wgt-rows" id="wgt-rows"></div>
+    <button class="add-row-btn" onclick="addWeightRow()">＋ Component toevoegen</button>
+    <div class="divider">of automatisch via modellink</div>
+    <p class="url-note">Plak een link van <strong>Printables.com</strong> of <strong>MakerWorld.com</strong> om het gewicht automatisch in te lezen:</p>
+    <div class="url-row">
+      <input type="url" class="url-input" id="model-url" placeholder="https://www.printables.com/model/...">
+      <button class="btn btn-p" onclick="fetchUrl()">Ophalen</button>
+    </div>
+    <div id="url-st" class="url-status"></div>
+  </div>
+
+  <!-- STAP 2 -->
+  <div class="step-card">
+    <div class="step-hdr">
+      <div class="step-num" id="n2">2</div>
+      <div class="step-lbl">Hoeveel kleuren?</div>
+    </div>
+    <div class="cqty-row">
+      <button class="cqty-btn" id="qty1" onclick="pickQty(1)">1<span class="lbl">kleur</span></button>
+      <button class="cqty-btn" id="qty2" onclick="pickQty(2)">2<span class="lbl">kleuren</span></button>
+      <button class="cqty-btn" id="qty3" onclick="pickQty(3)">3<span class="lbl">kleuren</span></button>
+      <button class="cqty-btn" id="qty4" onclick="pickQty(4)">4<span class="lbl">kleuren</span></button>
+    </div>
+  </div>
+
+  <!-- STAP 3 -->
+  <div class="step-card">
+    <div class="step-hdr">
+      <div class="step-num" id="n3">3</div>
+      <div class="step-lbl">Kies filament per kleur</div>
+    </div>
+    <div class="fil-note">
+      Dit zijn de filamenten en kleuren op voorraad die meteen printklaar zijn. Wil je een ander type filament, dan kan dat zeker — selecteer dan een willekeurig filament en stuur me een mailtje.
+    </div>
+    <button class="fil-info-toggle" onclick="toggleFilInfo()">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      Beknopte uitleg over de verschillende filamenten
+    </button>
+    <div class="fil-info-panel" id="fil-info-panel">
+      <div style="overflow-x:auto">
+        <table class="fil-tbl">
+          <thead><tr><th>Eigenschap</th><th>PLA</th><th>PETG</th><th>ABS</th></tr></thead>
+          <tbody>
+            <tr><td>Sterkte en taaiheid</td><td>Goed voor lichte tot middelzware onderdelen; brosser dan PETG/ABS</td><td>Sterk en taai, beter bestand tegen stoten</td><td>Zeer sterk en taai; geschikt voor functionele onderdelen</td></tr>
+            <tr><td>Warmtebestendigheid</td><td>Laag (vervormt bij ~50–60°C)</td><td>Gemiddeld (beter dan PLA)</td><td>Hoog (bestand tegen hogere temperaturen)</td></tr>
+            <tr><td>Nauwkeurigheid / afwerking</td><td>Goede detailweergave; glanzende uitstraling</td><td>Gladde, iets flexibele afwerking</td><td>Mattere afwerking; nabewerking (schuren, acetondampen) mogelijk</td></tr>
+            <tr><td>Chemische bestendigheid</td><td>Matig (sommige oplosmiddelen)</td><td>Beter bestand tegen chemicaliën dan PLA</td><td>Goed tegen veel chemicaliën (niet alle)</td></tr>
+            <tr><td>Toepassingen</td><td>Prototypen, modellen, visuele onderdelen, educatie</td><td>Functionele onderdelen, bevestigingen, buitengebruik</td><td>Mechanische onderdelen, behuizingen, gereedschap, hittebestendige delen</td></tr>
+            <tr><td>Nabewerking</td><td>Makkelijk schilderen en lijmen</td><td>Goed te lijmen en schilderen</td><td>Goed schuur- en polijstbaar; acetondamp voor glad oppervlak</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="color-slots" id="color-slots">
+      <div class="empty"><div class="empty-icon">🎨</div>Kies eerst het aantal kleuren hierboven.</div>
+    </div>
+  </div>
+
+  <!-- Prijsresultaat -->
+  <div id="price-wrap" style="display:none">
+    <div class="price-box">
+      <div class="price-lbl">Geschatte prijs</div>
+      <div class="price-amt" id="price-amt">€ 0,00</div>
+      <div class="price-min-badge" id="min-badge">Minimumprijs toegepast</div>
+
+      <div class="summary-wrap">
+        <div class="summary-title">Overzicht bestelling</div>
+        <table class="sum-tbl" id="sum-tbl">
+          <thead><tr><th>Stuks</th><th>Filament</th><th>Gewicht/stuk</th><th>Totaal</th></tr></thead>
+          <tbody id="sum-tbody"></tbody>
+          <tfoot><tr class="sum-total-row"><td colspan="3" style="text-align:right;padding-right:12px">Totaal gewicht</td><td id="sum-total-wgt"></td></tr></tfoot>
+        </table>
+      </div>
+
+      <div class="ship-block">
+        <div class="ship-title">Verzendopties (niet inbegrepen in prijs)</div>
+        <div class="ship-opts">
+          <div class="ship-card">
+            <div class="ship-ico">📦</div>
+            <div class="ship-name">Bpost BBOX Automaat</div>
+            <div class="ship-price">+ € 6,00</div>
+            <div class="ship-note">Afhalen in Bpost automaat</div>
+          </div>
+          <div class="ship-card">
+            <div class="ship-ico">🗺️</div>
+            <div class="ship-name">Mondial Relais</div>
+            <div class="ship-price">+ € 5,00</div>
+            <div class="ship-note">Afhalen in een afhaalpunt</div>
+          </div>
+          <div class="ship-card">
+            <div class="ship-ico">📍</div>
+            <div class="ship-name">Ophalen te Gentbrugge</div>
+            <div class="ship-price free">Gratis</div>
+            <div class="ship-note">Afspraak via e-mail</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="price-cta">
+        <p>Dit is een automatisch berekende schatting. Stuur een e-mail voor de definitieve offerte en om je model door te sturen.</p>
+        <a href="#" class="email-btn" id="email-cta">📧 Stuur offerte aanvraag</a>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- Login modal -->
+<div class="overlay" id="login-overlay">
+  <div class="login-box">
+    <h3>🔒 Beheerdersinlog</h3>
+    <input type="password" id="pwd-input" placeholder="Wachtwoord" onkeydown="if(event.key==='Enter')doPwd()">
+    <div class="login-err" id="pwd-err">Ongeldig wachtwoord. Probeer opnieuw.</div>
+    <div class="login-acts">
+      <button class="btn btn-s btn-sm" onclick="closeLogin()">Annuleren</button>
+      <button class="btn btn-p btn-sm" onclick="doPwd()">Inloggen</button>
+    </div>
+  </div>
+</div>
+
+<!-- Admin panel -->
+<div class="admin-wrap" id="admin-wrap" onclick="adminWrapClick(event)">
+  <div class="admin-panel" id="admin-panel">
+    <div class="admin-hdr">
+      <h2>⚙ BEHEER PANEEL</h2>
+      <button class="close-btn" onclick="closeAdmin()">✕</button>
+    </div>
+    <div class="admin-body">
+
+      <div class="a-sec">
+        <div class="a-sec-title">Algemene instellingen</div>
+        <div class="sgrid">
+          <div class="f-field">
+            <label>Minimumprijs per print (€)</label>
+            <input type="number" id="s-min" placeholder="2.50" step="0.01" min="0">
+            <div class="tip">Elke print kost minimaal dit bedrag</div>
+          </div>
+          <div class="f-field">
+            <label>Naam / bedrijfsnaam</label>
+            <input type="text" id="s-name" placeholder="bv. Gent 3D Prints">
+          </div>
+          <div class="f-field">
+            <label>Contact e-mailadres</label>
+            <input type="email" id="s-email" placeholder="jouw@email.be">
+          </div>
+          <div class="f-field">
+            <label>Nieuw wachtwoord</label>
+            <input type="password" id="s-pwd" placeholder="Leeg = ongewijzigd">
+          </div>
+        </div>
+        <div class="f-field" style="margin-bottom:1rem">
+          <label>Bannerafbeelding</label>
+          <input type="file" id="s-banner" accept="image/*" onchange="previewBanner(event)" style="padding:4px 0">
+          <div class="tip">Brede foto als achtergrond voor de titelbanner (wordt lokaal opgeslagen per apparaat)</div>
+          <img id="banner-preview" class="banner-preview" alt="">
+        </div>
+        <button class="btn btn-p btn-sm" onclick="saveSettings()">✓ Instellingen opslaan</button>
+        <span class="save-status" id="settings-status"></span>
+      </div>
+
+      <div class="a-sec">
+        <div class="a-sec-title">Filamentbeheer</div>
+        <p style="font-size:.8rem;color:var(--muted);margin-bottom:.9rem">
+          Sleep aan het ≡-icoon om de volgorde te wijzigen. De bovenste filamenten verschijnen eerst op de website.
+        </p>
+        <div class="add-form">
+          <div class="add-form-title" id="form-title">➕ Filament toevoegen</div>
+          <input type="hidden" id="edit-id">
+          <div class="f-row">
+            <div class="f-field">
+              <label>Materiaaltype *</label>
+              <input type="text" id="f-mat" placeholder="PLA, PETG, ABS, TPU…">
+            </div>
+            <div class="f-field">
+              <label>Kleurnaam *</label>
+              <input type="text" id="f-cname" placeholder="bv. Wit, Galaxy Zwart…">
+            </div>
+            <div class="f-field">
+              <label>Kleur *</label>
+              <div class="cpr">
+                <input type="color" id="f-cpick" value="#ff6600" oninput="syncHex()">
+                <input type="text" id="f-chex" placeholder="#ff6600" oninput="syncPick()">
+              </div>
+            </div>
+          </div>
+          <div class="f-row">
+            <div class="f-field">
+              <label>Prijs per kg (€) *</label>
+              <input type="number" id="f-pkg" placeholder="bv. 20.00" step="0.01" min="0" oninput="updatePer50()">
+              <div class="tip">= € <span id="per50-preview">0,00</span> per 50g</div>
+            </div>
+            <div class="f-field" style="grid-column:span 2">
+              <label>Foto URL (optioneel)</label>
+              <input type="url" id="f-photo" placeholder="https://… directe link naar foto van filament">
+            </div>
+          </div>
+          <div class="f-field" style="margin-top:8px">
+            <label>Voorraadstatus</label>
+            <div class="sw-wrap">
+              <button id="oos-sw" class="sw on" onclick="toggleOosSw()"></button>
+              <span class="sw-lbl" id="oos-sw-lbl">Op voorraad</span>
+            </div>
+            <input type="hidden" id="f-oos" value="0">
+          </div>
+          <div class="add-acts">
+            <button class="btn btn-p btn-sm" onclick="saveFil()">Opslaan</button>
+            <button class="btn btn-s btn-sm" onclick="cancelEdit()">Annuleren</button>
+            <span class="save-status" id="fil-status"></span>
+          </div>
+        </div>
+        <div class="fil-list" id="fil-list"></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════
+//  CONFIG – vul in na deployment van de Worker
+// ══════════════════════════════════════════════
+const CONFIG = {
+  API_URL: 'https://3dprint-api.1310134.workers.dev',   // bv. 'https://3dprint-api.xyz.workers.dev'
+  API_KEY: 'Antacid7-Disdain9-Disarm6-Smartness0-Regalia4',   // dezelfde waarde als API_SECRET in de Worker
+};
+
+// ══════════════════════════════════════════════
+//  State
+// ══════════════════════════════════════════════
+let S = {
+  filaments: [],
+  settings: { minPrice: 2.50, email: '', name: '', password: 'admin' }
+};
+let colorQty = 0;
+let slots = {};
+let slotTypeChoice = {};
+let weightRows = [];
+let authed = false;
+let dragSrcIdx = null;
+const BADGE_COLORS = ['#f97316','#2563eb','#16a34a','#9333ea'];
+
+// ══════════════════════════════════════════════
+//  API / opslag
+// ══════════════════════════════════════════════
+function apiReady() {
+  return CONFIG.API_URL && !CONFIG.API_URL.includes('JOUW_WORKER');
+}
+
+async function loadData() {
+  if (apiReady()) {
+    try {
+      const r = await fetch(`${CONFIG.API_URL}/api/data`);
+      if (r.ok) {
+        const d = await r.json();
+        if (d) S = { ...S, ...d };
+      }
+    } catch(e) {
+      console.warn('API niet bereikbaar, gebruik localStorage als fallback');
+      loadLocalStorage();
+    }
+  } else {
+    loadLocalStorage();
+  }
+  S.filaments = S.filaments.map(f => ({ outOfStock: false, ...f }));
+  if (!S.filaments.length) setDefaultFilaments();
+}
+
+function loadLocalStorage() {
+  try {
+    const d = localStorage.getItem('3dp_v3');
+    if (d) { const p = JSON.parse(d); S = { ...S, ...p }; }
+  } catch(e) {}
+}
+
+async function saveData() {
+  if (apiReady()) {
+    try {
+      await fetch(`${CONFIG.API_URL}/api/data`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-Api-Key': CONFIG.API_KEY },
+        body: JSON.stringify(S),
+      });
+    } catch(e) {
+      console.warn('API-opslag mislukt, opslaan in localStorage');
+      localStorage.setItem('3dp_v3', JSON.stringify(S));
+    }
+  } else {
+    localStorage.setItem('3dp_v3', JSON.stringify(S));
+  }
+}
+
+function setDefaultFilaments() {
+  S.filaments = [
+    {id:'1',material:'PLA',colorName:'Wit',colorHex:'#FFFFFF',pricePerKg:18,photoUrl:'',outOfStock:false},
+    {id:'2',material:'PLA',colorName:'Zwart',colorHex:'#1a1a1a',pricePerKg:18,photoUrl:'',outOfStock:false},
+    {id:'3',material:'PLA',colorName:'Rood',colorHex:'#e63946',pricePerKg:18,photoUrl:'',outOfStock:false},
+    {id:'4',material:'PLA',colorName:'Blauw',colorHex:'#2563eb',pricePerKg:18,photoUrl:'',outOfStock:false},
+    {id:'5',material:'PETG',colorName:'Transparant',colorHex:'#cce5f0',pricePerKg:22,photoUrl:'',outOfStock:false},
+    {id:'6',material:'PETG',colorName:'Zwart',colorHex:'#2d2d2d',pricePerKg:22,photoUrl:'',outOfStock:false},
+    {id:'7',material:'TPU',colorName:'Wit',colorHex:'#f0f0f0',pricePerKg:30,photoUrl:'',outOfStock:false},
+  ];
+}
+
+// ══════════════════════════════════════════════
+//  Banner (lokaal per apparaat)
+// ══════════════════════════════════════════════
+function applyBanner() {
+  const img = localStorage.getItem('3dp_banner');
+  const h = document.getElementById('main-header');
+  if (img) h.style.backgroundImage = `url(${img})`;
+}
+function previewBanner(e) {
+  const f = e.target.files[0];
+  if (!f) return;
+  const r = new FileReader();
+  r.onload = ev => {
+    const src = ev.target.result;
+    document.getElementById('banner-preview').src = src;
+    document.getElementById('banner-preview').classList.add('show');
+    localStorage.setItem('3dp_banner', src);
+    applyBanner();
+  };
+  r.readAsDataURL(f);
+}
+
+// ══════════════════════════════════════════════
+//  Weight rows
+// ══════════════════════════════════════════════
+function initWeightRows() {
+  weightRows = [{ id: 0, grams: '', qty: 1 }];
+  renderWeightRows();
+}
+function addWeightRow() {
+  weightRows.push({ id: Date.now(), grams: '', qty: 1 });
+  renderWeightRows();
+}
+function removeWeightRow(id) {
+  if (weightRows.length <= 1) return;
+  weightRows = weightRows.filter(r => r.id !== id);
+  renderWeightRows(); checkStep1(); calc();
+}
+function renderWeightRows() {
+  document.getElementById('wgt-rows').innerHTML = weightRows.map((row, i) => `
+    <div class="wgt-row">
+      <span style="font-size:.8rem;color:var(--muted);min-width:20px;text-align:right">${i+1}.</span>
+      <input type="number" placeholder="gram" min="0.1" step="0.1" value="${row.grams}"
+        oninput="setRowGrams(${row.id},this.value)" style="width:108px">
+      <span class="wgt-unit">gram</span>
+      <span class="wgt-sep">×</span>
+      <span class="qty-lbl">Aantal:</span>
+      <input type="number" class="qty-spin" min="1" max="100" step="1" value="${row.qty}"
+        oninput="setRowQty(${row.id},this.value)">
+      ${weightRows.length > 1 ? `<button class="rm-row-btn" onclick="removeWeightRow(${row.id})">✕</button>` : ''}
+    </div>`).join('');
+}
+function setRowGrams(id, v) {
+  const r = weightRows.find(r => r.id === id); if (r) r.grams = v;
+  checkStep1(); calc();
+}
+function setRowQty(id, v) {
+  const r = weightRows.find(r => r.id === id);
+  if (r) r.qty = Math.min(100, Math.max(1, parseInt(v) || 1));
+  calc();
+}
+function getTotalGrams() {
+  return weightRows.reduce((s, r) => {
+    const g = parseFloat(r.grams), q = parseInt(r.qty) || 1;
+    return s + (isNaN(g) || g <= 0 ? 0 : g * q);
+  }, 0);
+}
+function checkStep1() {
+  const ok = weightRows.some(r => parseFloat(r.grams) > 0);
+  if (ok) tick('n1'); else untick('n1', '1');
+}
+
+// ══════════════════════════════════════════════
+//  Color qty
+// ══════════════════════════════════════════════
+function pickQty(n) {
+  colorQty = n; slots = {}; slotTypeChoice = {};
+  for (let i = 1; i <= 4; i++) document.getElementById('qty'+i).classList.toggle('sel', i === n);
+  tick('n2'); renderSlots(); calc();
+}
+
+// ══════════════════════════════════════════════
+//  Filament info toggle
+// ══════════════════════════════════════════════
+function toggleFilInfo() {
+  document.getElementById('fil-info-panel').classList.toggle('open');
+}
+
+// ══════════════════════════════════════════════
+//  Color slots – two-phase (type → color)
+// ══════════════════════════════════════════════
+function renderSlots() {
+  const c = document.getElementById('color-slots');
+  if (!colorQty) {
+    c.innerHTML = '<div class="empty"><div class="empty-icon">🎨</div>Kies eerst het aantal kleuren hierboven.</div>';
+    return;
+  }
+  let html = '';
+  for (let i = 0; i < colorQty; i++) {
+    const label = colorQty === 1 ? 'Filament' : `Kleur ${i+1}`;
+    const chosen = slots[i] ? S.filaments.find(f => f.id === slots[i]) : null;
+    const bc = BADGE_COLORS[i];
+    let preview = '';
+    if (chosen) {
+      const hp = chosen.photoUrl && chosen.photoUrl.trim();
+      preview = `<div class="fil-preview">
+        ${hp ? `<img src="${chosen.photoUrl}" alt="${chosen.colorName}" onerror="this.style.display='none'">` :
+          `<div class="fil-preview-swatch" style="background:${chosen.colorHex}22">
+            <div style="width:34px;height:34px;border-radius:50%;background:${chosen.colorHex};border:2px solid rgba(0,0,0,.12);margin:auto"></div>
+          </div>`}
+        <div class="fil-preview-info">
+          <div class="nm">${chosen.material} — ${chosen.colorName}</div>
+          <div class="sb">${chosen.outOfStock
+            ? '<span style="color:#dc2626">⚠ Voorlopig niet op voorraad</span>'
+            : '<span style="color:#16a34a">✓ Op voorraad</span>'}</div>
+        </div>
+      </div>
+      <div class="oos-warning${chosen.outOfStock?' show':''}">
+        ⚠ Dit filament is voorlopig niet voorradig, dus de verwerking kan wat langer duren.
+      </div>`;
+    }
+    const slotContent = slotTypeChoice[i] ? buildColorGrid(i, slotTypeChoice[i]) : buildTypeGrid(i);
+    html += `<div class="color-slot">
+      <div class="slot-hdr">
+        <div class="slot-badge" style="background:${bc}">${i+1}</div>
+        <div class="slot-title">${label}</div>
+        ${chosen
+          ? `<div class="slot-chosen"><div class="slot-chosen-dot" style="background:${chosen.colorHex}"></div>${chosen.material} ${chosen.colorName}</div>`
+          : `<div class="slot-chosen" style="color:#94a3b8;font-style:italic">Nog niet gekozen</div>`}
+      </div>
+      <div class="slot-body">${slotContent}${preview}</div>
+    </div>`;
+  }
+  c.innerHTML = html;
+  // Attach click events to color cards
+  for (let i = 0; i < colorQty; i++) {
+    const grid = document.getElementById('cgrid-'+i);
+    if (grid) {
+      grid.querySelectorAll('.fp-card').forEach(el => {
+        el.addEventListener('click', () => {
+          slots[parseInt(el.dataset.s)] = el.dataset.id;
+          checkStep3done(); renderSlots(); calc();
+        });
+      });
+    }
+  }
+}
+
+function buildTypeGrid(slotIdx) {
+  const materials = [...new Set(S.filaments.map(f => f.material))];
+  if (!materials.length) return '<div class="empty" style="padding:.5rem">Geen filamenten beschikbaar.</div>';
+  return `<div class="type-grid">${materials.map(mat => {
+    const clrs = S.filaments.filter(f => f.material === mat);
+    return `<div class="type-card" onclick="pickSlotType(${slotIdx},'${mat}')">
+      <div class="type-name">${mat}</div>
+      <div class="type-dots">${clrs.slice(0,7).map(c => `<div class="type-dot" style="background:${c.colorHex}"></div>`).join('')}</div>
+      <div class="type-cnt">${clrs.length} kleur${clrs.length !== 1 ? 'en' : ''}</div>
+    </div>`;
+  }).join('')}</div>`;
+}
+
+function buildColorGrid(slotIdx, material) {
+  const clrs = S.filaments.filter(f => f.material === material);
+  const cards = clrs.map(f => {
+    const sel = slots[slotIdx] === f.id;
+    return `<div class="fp-card${sel?' sel':''}${f.outOfStock?' oos':''}" data-s="${slotIdx}" data-id="${f.id}">
+      ${sel ? '<div class="fp-check">✓</div>' : ''}
+      <div class="fp-swatch" style="background:${f.colorHex}"></div>
+      <div class="fp-mat">${f.material}</div>
+      <div class="fp-name">${f.colorName}</div>
+      <div class="fp-oos-badge">Niet op voorraad</div>
+    </div>`;
+  }).join('');
+  return `<button class="back-btn" onclick="backToTypeSelection(${slotIdx})">← Terug naar materiaaltype</button>
+    <div class="fil-pick-grid" id="cgrid-${slotIdx}">${cards}</div>`;
+}
+
+function pickSlotType(slotIdx, material) {
+  slotTypeChoice[slotIdx] = material;
+  if (slots[slotIdx]) {
+    const f = S.filaments.find(f => f.id === slots[slotIdx]);
+    if (f && f.material !== material) delete slots[slotIdx];
+  }
+  checkStep3done(); renderSlots(); calc();
+}
+function backToTypeSelection(slotIdx) {
+  delete slotTypeChoice[slotIdx];
+  renderSlots();
+}
+function checkStep3done() {
+  const done = colorQty > 0 && Object.keys(slots).length === colorQty;
+  if (done) tick('n3'); else untick('n3', '3');
+}
+
+// ══════════════════════════════════════════════
+//  Calculation
+// ══════════════════════════════════════════════
+function calc() {
+  const totalGrams = getTotalGrams();
+  const allDone = colorQty > 0 && Object.keys(slots).length === colorQty;
+  if (!allDone || totalGrams <= 0) { document.getElementById('price-wrap').style.display = 'none'; return; }
+
+  const selFils = Object.values(slots).map(id => S.filaments.find(f => f.id === id)).filter(Boolean);
+  const avgPpg = selFils.reduce((s, f) => s + f.pricePerKg / 1000, 0) / selFils.length;
+  const colorSurcharge = colorQty > 1 ? (colorQty - 1) * 0.75 : 0;
+  const raw = totalGrams * avgPpg + colorSurcharge;
+  const minP = parseFloat(S.settings.minPrice) || 0;
+  const final = Math.max(raw, minP);
+  const isMin = final === minP && raw < minP;
+
+  document.getElementById('price-amt').textContent = `€ ${final.toFixed(2).replace('.', ',')}`;
+  document.getElementById('min-badge').style.display = isMin ? 'inline-block' : 'none';
+
+  // Summary
+  let tbodyHtml = '', grandTotal = 0;
+  weightRows.forEach((row, i) => {
+    const g = parseFloat(row.grams), q = parseInt(row.qty) || 1;
+    if (isNaN(g) || g <= 0) return;
+    const rowTotal = g * q; grandTotal += rowTotal;
+    const filDesc = colorQty === 1
+      ? (selFils[0] ? `${selFils[0].material} — ${selFils[0].colorName}` : '—')
+      : selFils.map((f, ci) => `<span class="sum-dot" style="background:${BADGE_COLORS[ci]}"></span>${f.material} ${f.colorName}`).join('<br>');
+    tbodyHtml += `<tr>
+      <td style="text-align:center">${q}×</td>
+      <td>${filDesc}</td>
+      <td style="text-align:right">${g}g</td>
+      <td style="text-align:right">${rowTotal.toFixed(1)}g</td>
+    </tr>`;
+  });
+  if (colorSurcharge > 0) tbodyHtml += `<tr><td colspan="3" style="text-align:right;color:#64748b;font-size:.77rem">Meerkleurentoeslag (${colorQty-1}×)</td><td style="text-align:right;color:#94a3b8;font-size:.77rem">+€${colorSurcharge.toFixed(2)}</td></tr>`;
+  document.getElementById('sum-tbody').innerHTML = tbodyHtml;
+  document.getElementById('sum-total-wgt').textContent = grandTotal.toFixed(1) + 'g';
+
+  // Email
+  const modelUrl = document.getElementById('model-url').value || '';
+  const rowsDesc = weightRows.filter(r => parseFloat(r.grams) > 0)
+    .map((r, i) => `Component ${i+1}: ${r.grams}g × ${r.qty} exemplar${parseInt(r.qty) > 1 ? 'en' : ''}`).join('\n');
+  const filDesc = selFils.map((f, i) => colorQty > 1 ? `Kleur ${i+1}: ${f.material} ${f.colorName}` : `${f.material} ${f.colorName}`).join('\n');
+  const colorLine = colorSurcharge > 0 ? `\nMeerkleurentoeslag (${colorQty} kleuren): +€${colorSurcharge.toFixed(2)}` : '';
+  const body = encodeURIComponent(
+`Hallo,
+
+Kunt u de prijs van de offerte bevestigen om deze 3D prints te maken?
+
+${filDesc}
+${rowsDesc}
+Totaal gewicht: ${grandTotal.toFixed(1)}g${colorLine}
+Indicatieve prijs: €${final.toFixed(2)}
+
+URL Links naar de modellen:
+• ${modelUrl || '(vul hier de link in)'}
+
+Andere opmerkingen:
+
+
+Met vriendelijke groeten`);
+  const subj = encodeURIComponent(`3D Print aanvraag — ${selFils.map(f => f.material+' '+f.colorName).join(', ')}`);
+  document.getElementById('email-cta').href = `mailto:${S.settings.email||''}?subject=${subj}&body=${body}`;
+  document.getElementById('price-wrap').style.display = 'block';
+}
+
+// ══════════════════════════════════════════════
+//  URL fetch
+// ══════════════════════════════════════════════
+async function fetchUrl() {
+  const url = document.getElementById('model-url').value.trim();
+  if (!url) return;
+  const st = document.getElementById('url-st');
+  st.className = 'url-status loading'; st.style.display = 'block';
+  st.textContent = '⏳ Pagina ophalen via proxy…';
+  try {
+    const r = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(url)}`);
+    const d = await r.json(); const html = d.contents || '';
+    let w = null;
+    const jm = html.match(/"weight"\s*:\s*"?([0-9]+(?:\.[0-9]+)?)"?/i); if (jm) w = parseFloat(jm[1]);
+    if (!w) { const dm = html.match(/data-weight="([0-9]+(?:\.[0-9]+)?)"/i); if (dm) w = parseFloat(dm[1]); }
+    if (!w) { const pm = html.match(/(?:filament|weight|gram)[^0-9]*([0-9]+(?:\.[0-9]+)?)\s*g\b/i); if (pm) w = parseFloat(pm[1]); }
+    if (!w) { const mm = html.match(/([0-9]+(?:\.[0-9]+)?)\s*g\b/i); if (mm && parseFloat(mm[1]) < 5000 && parseFloat(mm[1]) > 0) w = parseFloat(mm[1]); }
+    if (w && w > 0 && w < 5000) {
+      weightRows[0].grams = w; renderWeightRows();
+      st.className = 'url-status ok'; st.textContent = `✓ Gewicht gevonden: ${w}g`;
+      tick('n1'); calc();
+    } else {
+      st.className = 'url-status err'; st.textContent = '⚠ Gewicht niet automatisch gevonden. Vul het handmatig in.';
+    }
+  } catch(e) {
+    st.className = 'url-status err'; st.textContent = '⚠ Kon de pagina niet ophalen. Vul het gewicht handmatig in.';
+  }
+}
+
+// ══════════════════════════════════════════════
+//  Tick helpers
+// ══════════════════════════════════════════════
+function tick(id) { const e = document.getElementById(id); e.classList.add('done'); e.textContent = '✓'; }
+function untick(id, lbl) { const e = document.getElementById(id); e.classList.remove('done'); e.textContent = lbl; }
+
+// ══════════════════════════════════════════════
+//  HIER-link
+// ══════════════════════════════════════════════
+function updateHierLink() {
+  const el = document.getElementById('hier-link');
+  if (!el) return;
+  const email = S.settings.email || '';
+  const body = encodeURIComponent('Hallo,\n\nIk wil graag meer informatie over een 3D print project:\n\n[Beschrijf uw project hier]\n\nLink naar het model:\n• \n\nMet vriendelijke groeten');
+  const subj = encodeURIComponent('3D Print project aanvraag');
+  el.href = email ? `mailto:${email}?subject=${subj}&body=${body}` : `#`;
+}
+
+// ══════════════════════════════════════════════
+//  Admin – login
+// ══════════════════════════════════════════════
+function openAdmin() {
+  if (authed) { showAdmin(); return; }
+  document.getElementById('login-overlay').classList.add('open');
+  setTimeout(() => document.getElementById('pwd-input').focus(), 80);
+}
+function closeLogin() {
+  document.getElementById('login-overlay').classList.remove('open');
+  document.getElementById('pwd-input').value = '';
+  document.getElementById('pwd-err').style.display = 'none';
+}
+function doPwd() {
+  if (document.getElementById('pwd-input').value === S.settings.password) {
+    authed = true; closeLogin(); showAdmin();
+  } else { document.getElementById('pwd-err').style.display = 'block'; }
+}
+function showAdmin() {
+  document.getElementById('admin-wrap').classList.add('open');
+  document.getElementById('s-min').value = S.settings.minPrice || '';
+  document.getElementById('s-email').value = S.settings.email || '';
+  document.getElementById('s-name').value = S.settings.name || '';
+  document.getElementById('s-pwd').value = '';
+  const saved = localStorage.getItem('3dp_banner');
+  if (saved) { document.getElementById('banner-preview').src = saved; document.getElementById('banner-preview').classList.add('show'); }
+  renderAdminList();
+}
+function closeAdmin() { document.getElementById('admin-wrap').classList.remove('open'); }
+function adminWrapClick(e) { if (e.target === document.getElementById('admin-wrap')) closeAdmin(); }
+
+async function saveSettings() {
+  S.settings.minPrice = parseFloat(document.getElementById('s-min').value) || 2.50;
+  S.settings.email = document.getElementById('s-email').value.trim();
+  S.settings.name = document.getElementById('s-name').value.trim();
+  const np = document.getElementById('s-pwd').value;
+  if (np) S.settings.password = np;
+  await saveData();
+  document.getElementById('header-name-el').textContent = S.settings.name || '';
+  updateHierLink();
+  showStatus('settings-status', '✓ Opgeslagen');
+}
+
+function showStatus(id, msg, isErr) {
+  const el = document.getElementById(id);
+  el.textContent = msg;
+  el.className = 'save-status show' + (isErr ? ' err' : '');
+  setTimeout(() => { el.className = 'save-status'; }, 3000);
+}
+
+// ══════════════════════════════════════════════
+//  Admin – filament list with drag-to-reorder
+// ══════════════════════════════════════════════
+function renderAdminList() {
+  const list = document.getElementById('fil-list');
+  if (!S.filaments.length) {
+    list.innerHTML = '<div class="empty"><div class="empty-icon">🧵</div>Nog geen filamenten toegevoegd.</div>';
+    return;
+  }
+  list.innerHTML = S.filaments.map((f, idx) => `
+    <div class="fil-item" draggable="true"
+      ondragstart="filDragStart(event,${idx})"
+      ondragend="filDragEnd(event)"
+      ondragover="filDragOver(event)"
+      ondrop="filDrop(event,${idx})">
+      <div class="drag-handle" title="Versleep om volgorde te wijzigen">≡</div>
+      <div class="fil-sw" style="background:${f.colorHex}"></div>
+      <div class="fil-info">
+        <div class="fil-nm">${f.material} — ${f.colorName}</div>
+        <div class="fil-mt">€${f.pricePerKg.toFixed(2)}/kg${f.photoUrl?' · 📷':''}${f.outOfStock
+          ?' · <span style="color:#dc2626">Niet op voorraad</span>'
+          :' · <span style="color:#16a34a">Op voorraad</span>'}</div>
+      </div>
+      <div class="fil-acts">
+        <button class="oos-toggle ${f.outOfStock?'out-stock':'in-stock'}" onclick="toggleStock('${f.id}')">
+          ${f.outOfStock?'❌ Niet op voorraad':'✓ Op voorraad'}
+        </button>
+        <button class="icon-btn" onclick="editFil('${f.id}')">✏️</button>
+        <button class="icon-btn del" onclick="delFil('${f.id}')">🗑️</button>
+      </div>
+    </div>`).join('');
+}
+
+function filDragStart(e, idx) {
+  dragSrcIdx = idx;
+  e.dataTransfer.effectAllowed = 'move';
+  setTimeout(() => { if(e.target) e.target.style.opacity = '0.45'; }, 0);
+}
+function filDragEnd(e) { if(e.target) e.target.style.opacity = '1'; dragSrcIdx = null; }
+function filDragOver(e) { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; e.currentTarget.classList.add('drag-over'); }
+async function filDrop(e, idx) {
+  e.preventDefault();
+  document.querySelectorAll('.fil-item').forEach(el => el.classList.remove('drag-over'));
+  if (dragSrcIdx === null || dragSrcIdx === idx) return;
+  const arr = [...S.filaments];
+  const [item] = arr.splice(dragSrcIdx, 1);
+  arr.splice(idx, 0, item);
+  S.filaments = arr; dragSrcIdx = null;
+  await saveData(); renderAdminList();
+}
+
+// ══════════════════════════════════════════════
+//  Admin – OOS toggle
+// ══════════════════════════════════════════════
+async function toggleStock(id) {
+  const f = S.filaments.find(f => f.id === id);
+  if (!f) return;
+  f.outOfStock = !f.outOfStock;
+  await saveData(); renderAdminList();
+}
+function toggleOosSw() {
+  const sw = document.getElementById('oos-sw');
+  const isOn = sw.classList.toggle('on');
+  document.getElementById('oos-sw-lbl').textContent = isOn ? 'Op voorraad' : 'Niet op voorraad';
+  document.getElementById('f-oos').value = isOn ? '0' : '1';
+}
+
+// ══════════════════════════════════════════════
+//  Admin – form
+// ══════════════════════════════════════════════
+function updatePer50() {
+  const v = parseFloat(document.getElementById('f-pkg').value);
+  document.getElementById('per50-preview').textContent = isNaN(v) ? '0,00' : (v/20).toFixed(2).replace('.',',');
+}
+function syncHex() { document.getElementById('f-chex').value = document.getElementById('f-cpick').value; }
+function syncPick() { const v = document.getElementById('f-chex').value; if(/^#[0-9a-f]{6}$/i.test(v)) document.getElementById('f-cpick').value = v; }
+
+async function saveFil() {
+  const mat = document.getElementById('f-mat').value.trim().toUpperCase();
+  const cname = document.getElementById('f-cname').value.trim();
+  const chex = document.getElementById('f-chex').value.trim() || document.getElementById('f-cpick').value;
+  const ppkg = parseFloat(document.getElementById('f-pkg').value);
+  const photo = document.getElementById('f-photo').value.trim();
+  const oos = document.getElementById('f-oos').value === '1';
+  if (!mat || !cname || isNaN(ppkg) || ppkg < 0) { alert('Vul alle verplichte velden in.'); return; }
+  const eid = document.getElementById('edit-id').value;
+  if (eid) {
+    const i = S.filaments.findIndex(f => f.id === eid);
+    if (i >= 0) S.filaments[i] = { id:eid, material:mat, colorName:cname, colorHex:chex, pricePerKg:ppkg, photoUrl:photo, outOfStock:oos };
+  } else {
+    S.filaments.push({ id: Date.now().toString(), material:mat, colorName:cname, colorHex:chex, pricePerKg:ppkg, photoUrl:photo, outOfStock:oos });
+  }
+  await saveData(); cancelEdit(); renderAdminList();
+  showStatus('fil-status', '✓ Opgeslagen');
+}
+
+function editFil(id) {
+  const f = S.filaments.find(f => f.id === id); if (!f) return;
+  document.getElementById('edit-id').value = f.id;
+  document.getElementById('f-mat').value = f.material;
+  document.getElementById('f-cname').value = f.colorName;
+  document.getElementById('f-chex').value = f.colorHex;
+  document.getElementById('f-cpick').value = f.colorHex;
+  document.getElementById('f-pkg').value = f.pricePerKg;
+  document.getElementById('per50-preview').textContent = (f.pricePerKg/20).toFixed(2).replace('.',',');
+  document.getElementById('f-photo').value = f.photoUrl || '';
+  const sw = document.getElementById('oos-sw');
+  if (f.outOfStock) { sw.classList.remove('on'); document.getElementById('oos-sw-lbl').textContent='Niet op voorraad'; document.getElementById('f-oos').value='1'; }
+  else { sw.classList.add('on'); document.getElementById('oos-sw-lbl').textContent='Op voorraad'; document.getElementById('f-oos').value='0'; }
+  document.getElementById('form-title').textContent = '✏️ Filament bewerken';
+  document.querySelector('.add-form').scrollIntoView({ behavior:'smooth', block:'nearest' });
+}
+
+async function delFil(id) {
+  if (!confirm('Dit filament verwijderen?')) return;
+  S.filaments = S.filaments.filter(f => f.id !== id);
+  await saveData(); renderAdminList();
+}
+
+function cancelEdit() {
+  document.getElementById('edit-id').value = '';
+  document.getElementById('f-mat').value = '';
+  document.getElementById('f-cname').value = '';
+  document.getElementById('f-chex').value = '';
+  document.getElementById('f-cpick').value = '#ff6600';
+  document.getElementById('f-pkg').value = '';
+  document.getElementById('per50-preview').textContent = '0,00';
+  document.getElementById('f-photo').value = '';
+  const sw = document.getElementById('oos-sw');
+  sw.classList.add('on'); document.getElementById('oos-sw-lbl').textContent='Op voorraad'; document.getElementById('f-oos').value='0';
+  document.getElementById('form-title').textContent = '➕ Filament toevoegen';
+}
+
+// ══════════════════════════════════════════════
+//  Init
+// ══════════════════════════════════════════════
+async function init() {
+  document.getElementById('loading-overlay').style.display = 'flex';
+  await loadData();
+  document.getElementById('loading-overlay').style.display = 'none';
+  initWeightRows();
+  applyBanner();
+  document.getElementById('header-name-el').textContent = S.settings.name || '';
+  updateHierLink();
+}
+
+init();
+</script>
+</body>
+</html>
