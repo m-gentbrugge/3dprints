@@ -1,0 +1,8 @@
+name = "3dprint-api"
+main = "worker.js"
+compatibility_date = "2024-09-02"
+
+# Vervang YOUR_KV_NAMESPACE_ID door de echte ID na stap 5 van SETUP.md
+[[kv_namespaces]]
+binding = "APP_DATA"
+id     = "YOUR_KV_NAMESPACE_ID"

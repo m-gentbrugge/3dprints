@@ -15,57 +15,57 @@
 body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
 a{color:inherit}
 
-/* ——— Header / banner ——— */
-header{
-  background:#0f172a;color:#fff;
-  padding:0 1.5rem;
-  display:flex;align-items:center;justify-content:space-between;
-  height:90px;position:sticky;top:0;z-index:50;
-  background-size:cover;background-position:center;
-  overflow:hidden;
-}
-header::before{content:'';position:absolute;inset:0;background:rgba(15,23,42,.72);z-index:0}
+/* ── Loading overlay ── */
+#loading-overlay{position:fixed;inset:0;background:rgba(15,23,42,.85);z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;color:#fff}
+.spinner{width:40px;height:40px;border:3px solid rgba(255,255,255,.2);border-top-color:#f97316;border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+#loading-overlay p{font-size:.9rem;color:#94a3b8}
+
+/* ── Header / banner ── */
+header{background:#0f172a;color:#fff;padding:0 1.5rem;display:flex;align-items:center;height:90px;position:sticky;top:0;z-index:50;background-size:cover;background-position:center;overflow:hidden}
+header::before{content:'';position:absolute;inset:0;background:rgba(15,23,42,.74);z-index:0}
 header>*{position:relative;z-index:1}
-.logo-text{font-family:'Rajdhani',sans-serif;font-size:1.5rem;font-weight:700;letter-spacing:.04em;line-height:1.15;max-width:480px}
-.logo-sub{font-size:.78rem;color:#94a3b8;font-weight:400;letter-spacing:.01em}
-.hdr-right{display:flex;align-items:center;gap:10px;flex-shrink:0}
-.hdr-name{font-size:.82rem;color:#94a3b8}
+.logo-wrap{flex:1;text-align:center}
+.logo-text{font-family:'Rajdhani',sans-serif;font-size:1.55rem;font-weight:700;letter-spacing:.08em;line-height:1.15;text-transform:uppercase}
+.logo-sub{font-size:.75rem;color:#94a3b8;font-weight:400;margin-top:2px}
+.hdr-right{flex-shrink:0}
 .admin-btn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;padding:7px 14px;border-radius:7px;cursor:pointer;font-size:.82rem;font-family:'DM Sans',sans-serif;transition:.2s;display:flex;align-items:center;gap:6px}
 .admin-btn:hover{background:rgba(255,255,255,.22)}
 
-/* ——— Main ——— */
+/* ── Main ── */
 .main{max-width:880px;margin:0 auto;padding:1.75rem 1rem 3rem}
 
-/* ——— Notice ——— */
-.notice{background:var(--accent-bg);border:1px solid #fed7aa;border-left:4px solid var(--accent);border-radius:var(--rs);padding:.9rem 1.1rem;margin-bottom:1.75rem;display:flex;gap:10px}
+/* ── Notice ── */
+.notice{background:var(--accent-bg);border:1px solid #fed7aa;border-left:4px solid var(--accent);border-radius:var(--rs);padding:.9rem 1.1rem;margin-bottom:1.5rem;display:flex;gap:10px}
 .notice p{font-size:.875rem;line-height:1.7;color:#92400e}
 .notice strong{color:#78350f}
 .page-title{font-family:'Rajdhani',sans-serif;font-size:1.9rem;font-weight:700;letter-spacing:.02em;margin-bottom:.2rem}
-.page-sub{color:var(--muted);font-size:.9rem;margin-bottom:1.5rem}
+.page-sub{color:var(--muted);font-size:.9rem;margin-bottom:.7rem}
+.hier-line{font-size:.88rem;color:var(--muted);margin-bottom:1.5rem;line-height:1.6}
+.hier-a{color:var(--accent);font-weight:700;text-decoration:underline;cursor:pointer}
+.hier-a:hover{color:var(--accent-d)}
 
-/* ——— Step card ——— */
+/* ── Step card ── */
 .step-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:1.4rem;margin-bottom:1.1rem}
 .step-hdr{display:flex;align-items:center;gap:10px;margin-bottom:1.1rem}
 .step-num{width:30px;height:30px;background:var(--accent);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.95rem;flex-shrink:0;transition:.3s}
 .step-num.done{background:#16a34a}
 .step-lbl{font-family:'Rajdhani',sans-serif;font-size:1.05rem;font-weight:600;letter-spacing:.04em}
 
-/* ——— Weight rows ——— */
+/* ── Weight rows ── */
 .wgt-rows{display:flex;flex-direction:column;gap:8px;margin-bottom:4px}
 .wgt-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.wgt-row input[type="number"]{width:110px;padding:8px 10px;border:1.5px solid var(--border);border-radius:var(--rs);font-size:.95rem;font-family:'DM Sans',sans-serif;outline:none;transition:.2s}
+.wgt-row input[type="number"]{width:108px;padding:8px 10px;border:1.5px solid var(--border);border-radius:var(--rs);font-size:.95rem;font-family:'DM Sans',sans-serif;outline:none;transition:.2s}
 .wgt-row input[type="number"]:focus{border-color:var(--accent)}
-.wgt-unit{font-size:.87rem;color:var(--muted);font-weight:500;min-width:35px}
-.wgt-sep{font-size:.8rem;color:var(--muted);padding:0 2px}
+.wgt-unit{font-size:.85rem;color:var(--muted);font-weight:500}
+.wgt-sep{font-size:.8rem;color:var(--muted)}
 .qty-lbl{font-size:.82rem;color:var(--muted)}
-.qty-spin{width:70px;padding:8px 8px;border:1.5px solid var(--border);border-radius:var(--rs);font-size:.95rem;font-family:'DM Sans',sans-serif;outline:none;transition:.2s}
+.qty-spin{width:68px;padding:8px 8px;border:1.5px solid var(--border);border-radius:var(--rs);font-size:.95rem;font-family:'DM Sans',sans-serif;outline:none;transition:.2s}
 .qty-spin:focus{border-color:var(--accent)}
-.remove-row{width:28px;height:28px;border:1.5px solid var(--border);border-radius:6px;background:#fff;cursor:pointer;color:#94a3b8;font-size:15px;display:flex;align-items:center;justify-content:center;transition:.2s;flex-shrink:0}
-.remove-row:hover{border-color:#ef4444;color:#ef4444}
+.rm-row-btn{width:28px;height:28px;border:1.5px solid var(--border);border-radius:6px;background:#fff;cursor:pointer;color:#94a3b8;font-size:15px;display:flex;align-items:center;justify-content:center;transition:.2s;flex-shrink:0}
+.rm-row-btn:hover{border-color:#ef4444;color:#ef4444}
 .add-row-btn{margin-top:8px;display:inline-flex;align-items:center;gap:5px;padding:6px 13px;border:1.5px dashed var(--border);border-radius:var(--rs);background:transparent;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.82rem;color:var(--muted);transition:.2s}
 .add-row-btn:hover{border-color:var(--accent);color:var(--accent)}
-
-/* URL fetch */
 .divider{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:.82rem;margin:1.1rem 0}
 .divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border)}
 .url-row{display:flex;gap:8px}
@@ -77,18 +77,18 @@ header>*{position:relative;z-index:1}
 .url-status.ok{background:#f0fdf4;color:#15803d}
 .url-status.err{background:#fef2f2;color:#dc2626}
 
-/* ——— Color qty buttons ——— */
+/* ── Color qty buttons ── */
 .cqty-row{display:flex;gap:10px;flex-wrap:wrap}
 .cqty-btn{width:68px;height:68px;border:2px solid var(--border);border-radius:var(--rs);background:var(--bg);cursor:pointer;font-family:'Rajdhani',sans-serif;font-size:1.7rem;font-weight:700;color:var(--muted);transition:.2s;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px}
 .cqty-btn .lbl{font-size:.58rem;font-weight:500;font-family:'DM Sans',sans-serif;text-transform:uppercase;letter-spacing:.05em;line-height:1}
 .cqty-btn:hover,.cqty-btn.sel{border-color:var(--accent);background:var(--accent-bg);color:var(--accent)}
 
-/* ——— Filament info note ——— */
-.fil-note{font-size:.82rem;color:var(--muted);margin-bottom:.8rem;line-height:1.6;background:#f1f5f9;border-radius:var(--rs);padding:.65rem .9rem;border-left:3px solid #94a3b8}
+/* ── Filament info note ── */
+.fil-note{font-size:.83rem;color:#475569;margin-bottom:.9rem;line-height:1.65;background:#f1f5f9;border-radius:var(--rs);padding:.65rem .9rem;border-left:3px solid #94a3b8}
 
-/* ——— Filament info toggle ——— */
-.fil-info-toggle{display:inline-flex;align-items:center;gap:6px;background:transparent;border:1.5px solid var(--border);border-radius:var(--rs);padding:6px 13px;font-family:'DM Sans',sans-serif;font-size:.82rem;cursor:pointer;color:var(--muted);transition:.2s;margin-bottom:1rem}
-.fil-info-toggle:hover{border-color:var(--accent);color:var(--accent)}
+/* ── Filament info toggle ── */
+.fil-info-toggle{display:inline-flex;align-items:center;gap:8px;background:#f1f5f9;border:2px solid #cbd5e1;border-radius:var(--rs);padding:9px 16px;font-family:'DM Sans',sans-serif;font-size:.92rem;font-weight:500;cursor:pointer;color:#334155;transition:.2s;margin-bottom:1rem}
+.fil-info-toggle:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-bg)}
 .fil-info-panel{display:none;margin-bottom:1rem;overflow-x:auto}
 .fil-info-panel.open{display:block}
 .fil-tbl{width:100%;border-collapse:collapse;font-size:.79rem;min-width:520px}
@@ -97,7 +97,7 @@ header>*{position:relative;z-index:1}
 .fil-tbl tr:nth-child(even) td{background:#f8fafc}
 .fil-tbl td:first-child{font-weight:500;color:#334155;width:160px}
 
-/* ——— Color slots ——— */
+/* ── Color slots ── */
 .color-slots{display:flex;flex-direction:column;gap:1rem}
 .color-slot{border:1.5px solid var(--border);border-radius:var(--rs);overflow:hidden}
 .slot-hdr{background:#f1f5f9;padding:.6rem 1rem;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border)}
@@ -107,7 +107,20 @@ header>*{position:relative;z-index:1}
 .slot-chosen-dot{width:13px;height:13px;border-radius:50%;border:1px solid rgba(0,0,0,.15)}
 .slot-body{padding:.9rem}
 
-/* ——— Filament pick grid ——— */
+/* ── Material type cards ── */
+.type-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:9px}
+.type-card{border:2px solid var(--border);border-radius:var(--rs);padding:.8rem .6rem;cursor:pointer;transition:.2s;text-align:center;background:var(--bg)}
+.type-card:hover{border-color:var(--accent);background:var(--accent-bg)}
+.type-name{font-family:'Rajdhani',sans-serif;font-size:1.6rem;font-weight:700;color:var(--accent);line-height:1}
+.type-dots{display:flex;gap:4px;justify-content:center;margin-top:6px;flex-wrap:wrap}
+.type-dot{width:12px;height:12px;border-radius:50%;border:1px solid rgba(0,0,0,.12)}
+.type-cnt{font-size:.72rem;color:var(--muted);margin-top:5px}
+
+/* ── Back button ── */
+.back-btn{display:inline-flex;align-items:center;gap:5px;background:transparent;border:1.5px solid var(--border);border-radius:var(--rs);padding:5px 11px;font-family:'DM Sans',sans-serif;font-size:.8rem;color:var(--muted);cursor:pointer;margin-bottom:.7rem;transition:.2s}
+.back-btn:hover{border-color:var(--accent);color:var(--accent)}
+
+/* ── Filament pick grid ── */
 .fil-pick-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px}
 .fp-card{border:2px solid var(--border);border-radius:var(--rs);padding:.65rem .45rem;cursor:pointer;transition:.2s;text-align:center;background:var(--bg);position:relative}
 .fp-card:hover{border-color:var(--accent)}
@@ -131,7 +144,7 @@ header>*{position:relative;z-index:1}
 .fil-preview-info .nm{font-weight:500;font-size:.85rem}
 .fil-preview-info .sb{font-size:.75rem;color:var(--muted)}
 
-/* ——— Buttons ——— */
+/* ── Buttons ── */
 .btn{padding:9px 17px;border-radius:var(--rs);font-family:'DM Sans',sans-serif;font-size:.88rem;font-weight:500;cursor:pointer;transition:.2s;border:none}
 .btn-p{background:var(--accent);color:#fff}
 .btn-p:hover{background:var(--accent-d)}
@@ -139,7 +152,7 @@ header>*{position:relative;z-index:1}
 .btn-s:hover{border-color:var(--accent);color:var(--accent)}
 .btn-sm{padding:6px 12px;font-size:.8rem}
 
-/* ——— Price result ——— */
+/* ── Price result ── */
 .price-box{background:#0f172a;border-radius:var(--r);padding:2rem 1.75rem;color:#fff;text-align:center;margin-top:1.1rem}
 .price-lbl{font-size:.78rem;color:#94a3b8;text-transform:uppercase;letter-spacing:.1em;margin-bottom:.4rem}
 .price-amt{font-family:'Rajdhani',sans-serif;font-size:3.8rem;font-weight:700;color:var(--accent);line-height:1;margin-bottom:.2rem}
@@ -152,7 +165,7 @@ header>*{position:relative;z-index:1}
 .sum-tbl th{background:#1e293b;color:#94a3b8;padding:6px 10px;font-weight:500;font-size:.73rem;text-transform:uppercase;letter-spacing:.06em}
 .sum-tbl td{padding:7px 10px;border-bottom:1px solid #1e293b;color:#e2e8f0;vertical-align:middle}
 .sum-tbl tr:last-child td{border-bottom:none}
-.sum-dot{width:13px;height:13px;border-radius:50%;display:inline-block;border:1.5px solid rgba(255,255,255,.2);vertical-align:middle;margin-right:5px}
+.sum-dot{width:12px;height:12px;border-radius:50%;display:inline-block;border:1.5px solid rgba(255,255,255,.2);vertical-align:middle;margin-right:5px}
 .sum-total-row td{background:#0d1a2e;font-weight:600;color:#f97316}
 
 /* Shipping */
@@ -166,16 +179,17 @@ header>*{position:relative;z-index:1}
 .ship-price.free{color:#4ade80}
 .ship-note{font-size:.68rem;color:#64748b;margin-top:2px}
 
+/* CTA / email button */
 .price-cta{margin-top:1.2rem;padding-top:1.2rem;border-top:1px solid #1e293b}
-.price-cta p{font-size:.82rem;color:#94a3b8;margin-bottom:.7rem}
-.email-btn{display:inline-block;background:var(--accent);color:#fff;padding:10px 22px;border-radius:var(--rs);font-weight:500;text-decoration:none;font-size:.88rem;transition:.2s}
+.price-cta p{font-size:.82rem;color:#94a3b8;margin-bottom:.9rem}
+.email-btn{display:block;width:100%;background:var(--accent);color:#fff;padding:18px 24px;border-radius:var(--rs);font-weight:700;text-decoration:none;font-size:2rem;font-family:'Rajdhani',sans-serif;letter-spacing:.04em;transition:.2s;text-align:center}
 .email-btn:hover{background:var(--accent-d)}
 
-/* ——— Empty ——— */
+/* ── Empty ── */
 .empty{text-align:center;padding:1.5rem;color:var(--muted);font-size:.87rem}
 .empty-icon{font-size:2rem;margin-bottom:.35rem}
 
-/* ——— Login ——— */
+/* ── Login ── */
 .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:200;align-items:center;justify-content:center}
 .overlay.open{display:flex}
 .login-box{background:#fff;border-radius:var(--r);padding:1.75rem;width:310px}
@@ -185,10 +199,10 @@ header>*{position:relative;z-index:1}
 .login-err{color:#dc2626;font-size:.82rem;margin-bottom:7px;display:none}
 .login-acts{display:flex;gap:8px;justify-content:flex-end}
 
-/* ——— Admin ——— */
+/* ── Admin ── */
 .admin-wrap{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:150;overflow-y:auto}
 .admin-wrap.open{display:block}
-.admin-panel{background:#fff;max-width:840px;margin:1.5rem auto;border-radius:var(--r);overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.2)}
+.admin-panel{background:#fff;max-width:860px;margin:1.5rem auto;border-radius:var(--r);overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.2)}
 .admin-hdr{background:#0f172a;color:#fff;padding:1.1rem 1.4rem;display:flex;align-items:center;justify-content:space-between}
 .admin-hdr h2{font-family:'Rajdhani',sans-serif;font-size:1.2rem;font-weight:700;letter-spacing:.06em}
 .close-btn{background:rgba(255,255,255,.12);border:none;color:#fff;width:30px;height:30px;border-radius:6px;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center}
@@ -207,28 +221,26 @@ header>*{position:relative;z-index:1}
 .add-form{background:var(--bg);border:1px solid var(--border);border-radius:var(--rs);padding:1rem;margin-bottom:.9rem}
 .add-form-title{font-weight:500;font-size:.88rem;margin-bottom:10px;color:var(--text)}
 .add-acts{display:flex;gap:7px;margin-top:6px}
+
+/* Filament list with drag */
 .fil-list{display:flex;flex-direction:column;gap:7px;margin-bottom:.5rem}
-.fil-item{display:flex;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--border);border-radius:var(--rs);padding:.65rem .9rem}
+.fil-item{display:flex;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--border);border-radius:var(--rs);padding:.65rem .9rem;cursor:default;transition:background .15s}
+.fil-item.drag-over{background:#f0fdf4;border-color:#16a34a}
+.drag-handle{cursor:grab;color:#cbd5e1;font-size:1.1rem;flex-shrink:0;padding:0 3px;user-select:none;touch-action:none}
+.drag-handle:active{cursor:grabbing}
 .fil-sw{width:34px;height:34px;border-radius:50%;border:2px solid rgba(0,0,0,.1);flex-shrink:0}
 .fil-info{flex:1}
 .fil-nm{font-weight:500;font-size:.87rem}
 .fil-mt{font-size:.77rem;color:var(--muted)}
 .fil-acts{display:flex;gap:5px;align-items:center}
-.icon-btn{width:29px;height:29px;border-radius:6px;border:1.5px solid var(--border);background:#fff;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;transition:.2s}
-.icon-btn:hover{border-color:var(--accent)}
-.icon-btn.del:hover{border-color:#ef4444;color:#ef4444}
 .oos-toggle{font-size:.72rem;padding:4px 8px;border-radius:5px;border:1.5px solid var(--border);background:#fff;cursor:pointer;font-family:'DM Sans',sans-serif;transition:.2s;white-space:nowrap}
 .oos-toggle.in-stock{border-color:#16a34a;color:#16a34a;background:#f0fdf4}
 .oos-toggle.out-stock{border-color:#dc2626;color:#dc2626;background:#fef2f2}
-.sgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(195px,1fr));gap:10px;margin-bottom:1.3rem}
-.tip{font-size:.74rem;color:var(--muted);margin-top:2px}
+.icon-btn{width:29px;height:29px;border-radius:6px;border:1.5px solid var(--border);background:#fff;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;transition:.2s}
+.icon-btn:hover{border-color:var(--accent)}
+.icon-btn.del:hover{border-color:#ef4444;color:#ef4444}
 
-/* banner upload in admin */
-.banner-preview{width:100%;height:80px;border-radius:var(--rs);border:1.5px solid var(--border);object-fit:cover;display:none;margin-top:6px}
-.banner-preview.show{display:block}
-.banner-current{font-size:.78rem;color:var(--muted);margin-top:4px}
-
-/* toggle switch */
+/* Switch */
 .sw-wrap{display:flex;align-items:center;gap:8px;margin-top:4px}
 .sw{width:36px;height:20px;border-radius:10px;background:#cbd5e1;cursor:pointer;position:relative;transition:.2s;border:none;flex-shrink:0}
 .sw::after{content:'';position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:#fff;transition:.2s}
@@ -236,9 +248,19 @@ header>*{position:relative;z-index:1}
 .sw.on::after{left:18px}
 .sw-lbl{font-size:.82rem;color:var(--muted)}
 
+.sgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(195px,1fr));gap:10px;margin-bottom:1.3rem}
+.tip{font-size:.74rem;color:var(--muted);margin-top:2px}
+.banner-preview{width:100%;max-height:80px;border-radius:var(--rs);border:1.5px solid var(--border);object-fit:cover;display:none;margin-top:6px}
+.banner-preview.show{display:block}
+
+.save-status{font-size:.78rem;color:#16a34a;margin-left:8px;display:none}
+.save-status.show{display:inline}
+.save-status.err{color:#dc2626}
+
 @media(max-width:600px){
   .main{padding:1rem .75rem 2rem}
   .price-amt{font-size:2.8rem}
+  .email-btn{font-size:1.5rem;padding:14px 18px}
   .ship-opts{flex-direction:column;align-items:center}
   .admin-panel{margin:.5rem;border-radius:var(--rs)}
   .wgt-row{gap:5px}
@@ -247,9 +269,16 @@ header>*{position:relative;z-index:1}
 </head>
 <body>
 
+<!-- Loading overlay -->
+<div id="loading-overlay">
+  <div class="spinner"></div>
+  <p>Gegevens laden…</p>
+</div>
+
+<!-- Header -->
 <header id="main-header">
-  <div class="logo-text">
-    Laat je model 3D Printen te Gentbrugge
+  <div class="logo-wrap">
+    <div class="logo-text">LAAT JE 3D BESTAND PRINTEN TE GENTBRUGGE</div>
     <div class="logo-sub" id="header-name-el"></div>
   </div>
   <div class="hdr-right">
@@ -264,13 +293,17 @@ header>*{position:relative;z-index:1}
 
   <div class="notice">
     <div style="font-size:18px;flex-shrink:0;margin-top:2px">ℹ️</div>
-    <p>Dit is een automatisch gegenereerde schatting van de printkost op basis van materiaal en gewicht en verwerking. De werkelijke prijs kan afwijken. <strong>Stuur dus altijd een mailtje ter bevestiging van de prijs</strong> via de e-mail knop onderaan. Vergeet niet om de link naar het model door te sturen in de email en zet er eventueel opmerkingen bij voor de print. Weet dat 3D printen voor mij een hobby is en dat ik moeilijk grote hoeveelheden en reeksen kan printen. Mijn doel is eerder om iemand uit de buurt die iets wil printen verder te helpen.</p>
+    <p>Dit is een automatisch gegenereerde schatting van de printkost op basis van materiaal, gewicht en verwerking. Stuur altijd een mailtje ter bevestiging van de prijs via de e-mail knop onderaan de pagina. Vergeet niet om de link naar het 3d-model door te sturen in de email en zet er eventueel opmerkingen bij voor de print.</p>
   </div>
 
   <div class="page-title">Bereken je printprijs</div>
   <p class="page-sub">Volg de stappen hieronder voor een snelle prijsindicatie.</p>
+  <p class="hier-line">Indien u niet via deze toepassing tot een duidelijke offerte kunt komen, klik dan
+    <a id="hier-link" href="#" class="hier-a">HIER</a>
+    om meteen een mail te sturen met alle info over het project dat u wenst te printen.
+  </p>
 
-  <!-- STAP 1: Gewicht & aantallen -->
+  <!-- STAP 1 -->
   <div class="step-card">
     <div class="step-hdr">
       <div class="step-num" id="n1">1</div>
@@ -287,7 +320,7 @@ header>*{position:relative;z-index:1}
     <div id="url-st" class="url-status"></div>
   </div>
 
-  <!-- STAP 2: Aantal kleuren -->
+  <!-- STAP 2 -->
   <div class="step-card">
     <div class="step-hdr">
       <div class="step-num" id="n2">2</div>
@@ -301,7 +334,7 @@ header>*{position:relative;z-index:1}
     </div>
   </div>
 
-  <!-- STAP 3: Filament per kleur -->
+  <!-- STAP 3 -->
   <div class="step-card">
     <div class="step-hdr">
       <div class="step-num" id="n3">3</div>
@@ -311,24 +344,22 @@ header>*{position:relative;z-index:1}
       Dit zijn de filamenten en kleuren op voorraad die meteen printklaar zijn. Wil je een ander type filament, dan kan dat zeker — selecteer dan een willekeurig filament en stuur me een mailtje.
     </div>
     <button class="fil-info-toggle" onclick="toggleFilInfo()">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
       Beknopte uitleg over de verschillende filamenten
     </button>
     <div class="fil-info-panel" id="fil-info-panel">
       <div style="overflow-x:auto">
-      <table class="fil-tbl">
-        <thead>
-          <tr><th>Eigenschap</th><th>PLA</th><th>PETG</th><th>ABS</th></tr>
-        </thead>
-        <tbody>
-          <tr><td>Sterkte en taaiheid</td><td>Goed voor lichte tot middelzware onderdelen; brosser dan PETG/ABS</td><td>Sterk en taai, beter bestand tegen stoten</td><td>Zeer sterk en taai; geschikt voor functionele onderdelen</td></tr>
-          <tr><td>Warmtebestendigheid</td><td>Laag (vervormt bij ~50–60°C)</td><td>Gemiddeld (beter dan PLA)</td><td>Hoog (bestand tegen hogere temperaturen)</td></tr>
-          <tr><td>Nauwkeurigheid / afwerking</td><td>Goede detailweergave; glanzende uitstraling</td><td>Gladde, iets flexibele afwerking; minder sprankelend</td><td>Mattere afwerking; nabewerking (schuren, acetondampen) mogelijk</td></tr>
-          <tr><td>Chemische bestendigheid</td><td>Matig (sommige oplosmiddelen)</td><td>Beter bestand tegen chemicaliën dan PLA</td><td>Goed tegen veel chemicaliën (niet alle)</td></tr>
-          <tr><td>Toepassingen</td><td>Prototypen, modellen, visuele onderdelen, educatie</td><td>Functionele onderdelen, bevestigingen, buitengebruik</td><td>Mechanische onderdelen, behuizingen, gereedschap, hittebestendige delen</td></tr>
-          <tr><td>Nabewerking</td><td>Makkelijk schilderen en lijmen</td><td>Goed te lijmen en schilderen</td><td>Goed schuur- en polijstbaar; acetondamp voor glad oppervlak</td></tr>
-        </tbody>
-      </table>
+        <table class="fil-tbl">
+          <thead><tr><th>Eigenschap</th><th>PLA</th><th>PETG</th><th>ABS</th></tr></thead>
+          <tbody>
+            <tr><td>Sterkte en taaiheid</td><td>Goed voor lichte tot middelzware onderdelen; brosser dan PETG/ABS</td><td>Sterk en taai, beter bestand tegen stoten</td><td>Zeer sterk en taai; geschikt voor functionele onderdelen</td></tr>
+            <tr><td>Warmtebestendigheid</td><td>Laag (vervormt bij ~50–60°C)</td><td>Gemiddeld (beter dan PLA)</td><td>Hoog (bestand tegen hogere temperaturen)</td></tr>
+            <tr><td>Nauwkeurigheid / afwerking</td><td>Goede detailweergave; glanzende uitstraling</td><td>Gladde, iets flexibele afwerking</td><td>Mattere afwerking; nabewerking (schuren, acetondampen) mogelijk</td></tr>
+            <tr><td>Chemische bestendigheid</td><td>Matig (sommige oplosmiddelen)</td><td>Beter bestand tegen chemicaliën dan PLA</td><td>Goed tegen veel chemicaliën (niet alle)</td></tr>
+            <tr><td>Toepassingen</td><td>Prototypen, modellen, visuele onderdelen, educatie</td><td>Functionele onderdelen, bevestigingen, buitengebruik</td><td>Mechanische onderdelen, behuizingen, gereedschap, hittebestendige delen</td></tr>
+            <tr><td>Nabewerking</td><td>Makkelijk schilderen en lijmen</td><td>Goed te lijmen en schilderen</td><td>Goed schuur- en polijstbaar; acetondamp voor glad oppervlak</td></tr>
+          </tbody>
+        </table>
       </div>
     </div>
     <div class="color-slots" id="color-slots">
@@ -346,7 +377,7 @@ header>*{position:relative;z-index:1}
       <div class="summary-wrap">
         <div class="summary-title">Overzicht bestelling</div>
         <table class="sum-tbl" id="sum-tbl">
-          <thead><tr><th>Stuks</th><th>Filament</th><th>Gewicht/stuk</th><th>Totaal gewicht</th></tr></thead>
+          <thead><tr><th>Stuks</th><th>Filament</th><th>Gewicht/stuk</th><th>Totaal</th></tr></thead>
           <tbody id="sum-tbody"></tbody>
           <tfoot><tr class="sum-total-row"><td colspan="3" style="text-align:right;padding-right:12px">Totaal gewicht</td><td id="sum-total-wgt"></td></tr></tfoot>
         </table>
@@ -407,7 +438,6 @@ header>*{position:relative;z-index:1}
     </div>
     <div class="admin-body">
 
-      <!-- Instellingen -->
       <div class="a-sec">
         <div class="a-sec-title">Algemene instellingen</div>
         <div class="sgrid">
@@ -426,22 +456,24 @@ header>*{position:relative;z-index:1}
           </div>
           <div class="f-field">
             <label>Nieuw wachtwoord</label>
-            <input type="password" id="s-pwd" placeholder="Beheer dit in je Worker env var">
+            <input type="password" id="s-pwd" placeholder="Leeg = ongewijzigd">
           </div>
         </div>
         <div class="f-field" style="margin-bottom:1rem">
           <label>Bannerafbeelding</label>
           <input type="file" id="s-banner" accept="image/*" onchange="previewBanner(event)" style="padding:4px 0">
-          <div class="tip">Kies een brede foto als achtergrond voor de header-banner</div>
-          <img id="banner-preview" class="banner-preview" alt="Banner preview">
-          <div class="banner-current" id="banner-current"></div>
+          <div class="tip">Brede foto als achtergrond voor de titelbanner (wordt lokaal opgeslagen per apparaat)</div>
+          <img id="banner-preview" class="banner-preview" alt="">
         </div>
         <button class="btn btn-p btn-sm" onclick="saveSettings()">✓ Instellingen opslaan</button>
+        <span class="save-status" id="settings-status"></span>
       </div>
 
-      <!-- Filamentbeheer -->
       <div class="a-sec">
         <div class="a-sec-title">Filamentbeheer</div>
+        <p style="font-size:.8rem;color:var(--muted);margin-bottom:.9rem">
+          Sleep aan het ≡-icoon om de volgorde te wijzigen. De bovenste filamenten verschijnen eerst op de website.
+        </p>
         <div class="add-form">
           <div class="add-form-title" id="form-title">➕ Filament toevoegen</div>
           <input type="hidden" id="edit-id">
@@ -484,6 +516,7 @@ header>*{position:relative;z-index:1}
           <div class="add-acts">
             <button class="btn btn-p btn-sm" onclick="saveFil()">Opslaan</button>
             <button class="btn btn-s btn-sm" onclick="cancelEdit()">Annuleren</button>
+            <span class="save-status" id="fil-status"></span>
           </div>
         </div>
         <div class="fil-list" id="fil-list"></div>
@@ -493,209 +526,183 @@ header>*{position:relative;z-index:1}
   </div>
 </div>
 
-
 <script>
-// ——— Config ———
-const DATA_URL = './data/site-data.json';
-const API_BASE_URL = 'https://3dprints-api.1310134.workers.dev';
+// ══════════════════════════════════════════════
+//  CONFIG – vul in na deployment van de Worker
+// ══════════════════════════════════════════════
+const CONFIG = {
+  API_URL: 'https://3dprint-api.1310134.workers.dev',   // bv. 'https://3dprint-api.xyz.workers.dev'
+  API_KEY: 'Antacid7-Disdain9-Disarm6-Smartness0-Regalia4',   // dezelfde waarde als API_SECRET in de Worker
+};
 
-// ——— Defaults / State ———
-const DEFAULT_FILAMENTS = [
-  {id:'1',material:'PLA',colorName:'Wit',colorHex:'#FFFFFF',pricePerKg:18,photoUrl:'',outOfStock:false},
-  {id:'2',material:'PLA',colorName:'Zwart',colorHex:'#1a1a1a',pricePerKg:18,photoUrl:'',outOfStock:false},
-  {id:'3',material:'PLA',colorName:'Rood',colorHex:'#e63946',pricePerKg:18,photoUrl:'',outOfStock:false},
-  {id:'4',material:'PLA',colorName:'Blauw',colorHex:'#2563eb',pricePerKg:18,photoUrl:'',outOfStock:false},
-  {id:'5',material:'PETG',colorName:'Transparant',colorHex:'#cce5f0',pricePerKg:22,photoUrl:'',outOfStock:false},
-  {id:'6',material:'PETG',colorName:'Zwart',colorHex:'#2d2d2d',pricePerKg:22,photoUrl:'',outOfStock:false},
-  {id:'7',material:'TPU',colorName:'Wit',colorHex:'#f0f0f0',pricePerKg:30,photoUrl:'',outOfStock:false}
-];
-
+// ══════════════════════════════════════════════
+//  State
+// ══════════════════════════════════════════════
 let S = {
   filaments: [],
-  settings: { minPrice: 2.50, email: '', name: '', bannerImg: '' }
+  settings: { minPrice: 2.50, email: '', name: '', password: 'admin' }
 };
 let colorQty = 0;
 let slots = {};
-let authed = false;
+let slotTypeChoice = {};
 let weightRows = [];
-let adminPassword = '';
+let authed = false;
+let dragSrcIdx = null;
 const BADGE_COLORS = ['#f97316','#2563eb','#16a34a','#9333ea'];
 
-function configuredApiBaseUrl() {
-  return API_BASE_URL && !API_BASE_URL.includes('VUL-HIER');
+// ══════════════════════════════════════════════
+//  API / opslag
+// ══════════════════════════════════════════════
+function apiReady() {
+  return CONFIG.API_URL && !CONFIG.API_URL.includes('JOUW_WORKER');
 }
 
-function normalizeState() {
-  if (!Array.isArray(S.filaments)) S.filaments = [];
-  if (!S.filaments.length) S.filaments = JSON.parse(JSON.stringify(DEFAULT_FILAMENTS));
-  S.settings = {
-    minPrice: 2.50,
-    email: '',
-    name: '',
-    bannerImg: '',
-    ...(S.settings || {})
-  };
-  S.filaments = S.filaments.map((f, idx) => ({
-    id: String(f.id || Date.now() + idx),
-    material: String(f.material || '').trim().toUpperCase(),
-    colorName: String(f.colorName || '').trim(),
-    colorHex: /^#[0-9a-f]{6}$/i.test(f.colorHex || '') ? f.colorHex : '#ff6600',
-    pricePerKg: Number.isFinite(Number(f.pricePerKg)) ? Number(f.pricePerKg) : 0,
-    photoUrl: String(f.photoUrl || '').trim(),
-    outOfStock: !!f.outOfStock
-  })).filter(f => f.material && f.colorName);
-}
-
-function sanitizedStateForSave() {
-  return {
-    filaments: S.filaments.map(f => ({
-      id: String(f.id),
-      material: String(f.material || '').trim().toUpperCase(),
-      colorName: String(f.colorName || '').trim(),
-      colorHex: String(f.colorHex || '#ff6600').trim(),
-      pricePerKg: Number(f.pricePerKg || 0),
-      photoUrl: String(f.photoUrl || '').trim(),
-      outOfStock: !!f.outOfStock
-    })),
-    settings: {
-      minPrice: Number(S.settings.minPrice || 0),
-      email: String(S.settings.email || '').trim(),
-      name: String(S.settings.name || '').trim(),
-      bannerImg: String(S.settings.bannerImg || '').trim()
+async function loadData() {
+  if (apiReady()) {
+    try {
+      const r = await fetch(`${CONFIG.API_URL}/api/data`);
+      if (r.ok) {
+        const d = await r.json();
+        if (d) S = { ...S, ...d };
+      }
+    } catch(e) {
+      console.warn('API niet bereikbaar, gebruik localStorage als fallback');
+      loadLocalStorage();
     }
-  };
+  } else {
+    loadLocalStorage();
+  }
+  S.filaments = S.filaments.map(f => ({ outOfStock: false, ...f }));
+  if (!S.filaments.length) setDefaultFilaments();
 }
 
-async function load() {
+function loadLocalStorage() {
   try {
-    const res = await fetch(`${DATA_URL}?v=${Date.now()}`, { cache: 'no-store' });
-    if (!res.ok) throw new Error(`Kon ${DATA_URL} niet laden (${res.status})`);
-    const data = await res.json();
-    if (data && typeof data === 'object') {
-      S = {
-        filaments: Array.isArray(data.filaments) ? data.filaments : [],
-        settings: { ...(data.settings || {}) }
-      };
+    const d = localStorage.getItem('3dp_v3');
+    if (d) { const p = JSON.parse(d); S = { ...S, ...p }; }
+  } catch(e) {}
+}
+
+async function saveData() {
+  if (apiReady()) {
+    try {
+      await fetch(`${CONFIG.API_URL}/api/data`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-Api-Key': CONFIG.API_KEY },
+        body: JSON.stringify(S),
+      });
+    } catch(e) {
+      console.warn('API-opslag mislukt, opslaan in localStorage');
+      localStorage.setItem('3dp_v3', JSON.stringify(S));
     }
-  } catch (err) {
-    console.warn('Fallback naar standaarddata:', err);
+  } else {
+    localStorage.setItem('3dp_v3', JSON.stringify(S));
   }
-  normalizeState();
 }
 
-async function persistStateToGithub(message) {
-  if (!configuredApiBaseUrl()) {
-    throw new Error('De Cloudflare Worker URL is nog niet ingesteld in index.html.');
-  }
-  if (!adminPassword) {
-    throw new Error('Log eerst in als beheerder.');
-  }
-
-  const res = await fetch(`${API_BASE_URL}/save`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      password: adminPassword,
-      message: message || 'Website data bijgewerkt',
-      data: sanitizedStateForSave()
-    })
-  });
-
-  let payload = {};
-  try { payload = await res.json(); } catch (_) {}
-
-  if (!res.ok || !payload.ok) {
-    throw new Error(payload.error || `Opslaan mislukt (${res.status})`);
-  }
-  return payload;
+function setDefaultFilaments() {
+  S.filaments = [
+    {id:'1',material:'PLA',colorName:'Wit',colorHex:'#FFFFFF',pricePerKg:18,photoUrl:'',outOfStock:false},
+    {id:'2',material:'PLA',colorName:'Zwart',colorHex:'#1a1a1a',pricePerKg:18,photoUrl:'',outOfStock:false},
+    {id:'3',material:'PLA',colorName:'Rood',colorHex:'#e63946',pricePerKg:18,photoUrl:'',outOfStock:false},
+    {id:'4',material:'PLA',colorName:'Blauw',colorHex:'#2563eb',pricePerKg:18,photoUrl:'',outOfStock:false},
+    {id:'5',material:'PETG',colorName:'Transparant',colorHex:'#cce5f0',pricePerKg:22,photoUrl:'',outOfStock:false},
+    {id:'6',material:'PETG',colorName:'Zwart',colorHex:'#2d2d2d',pricePerKg:22,photoUrl:'',outOfStock:false},
+    {id:'7',material:'TPU',colorName:'Wit',colorHex:'#f0f0f0',pricePerKg:30,photoUrl:'',outOfStock:false},
+  ];
 }
 
+// ══════════════════════════════════════════════
+//  Banner (lokaal per apparaat)
+// ══════════════════════════════════════════════
 function applyBanner() {
+  const img = localStorage.getItem('3dp_banner');
   const h = document.getElementById('main-header');
-  if (S.settings.bannerImg) h.style.backgroundImage = `url(${S.settings.bannerImg})`;
-  else h.style.backgroundImage = '';
+  if (img) h.style.backgroundImage = `url(${img})`;
 }
-
 function previewBanner(e) {
   const f = e.target.files[0];
   if (!f) return;
   const r = new FileReader();
   r.onload = ev => {
-    document.getElementById('banner-preview').src = ev.target.result;
+    const src = ev.target.result;
+    document.getElementById('banner-preview').src = src;
     document.getElementById('banner-preview').classList.add('show');
-    S.settings.bannerImg = ev.target.result;
+    localStorage.setItem('3dp_banner', src);
     applyBanner();
   };
   r.readAsDataURL(f);
 }
 
+// ══════════════════════════════════════════════
+//  Weight rows
+// ══════════════════════════════════════════════
 function initWeightRows() {
-  weightRows = [{id:0,grams:'',qty:1}];
+  weightRows = [{ id: 0, grams: '', qty: 1 }];
   renderWeightRows();
 }
 function addWeightRow() {
-  const id = Date.now();
-  weightRows.push({id,grams:'',qty:1});
+  weightRows.push({ id: Date.now(), grams: '', qty: 1 });
   renderWeightRows();
 }
 function removeWeightRow(id) {
   if (weightRows.length <= 1) return;
   weightRows = weightRows.filter(r => r.id !== id);
-  renderWeightRows();
-  checkStep1();
-  calc();
+  renderWeightRows(); checkStep1(); calc();
 }
 function renderWeightRows() {
-  const container = document.getElementById('wgt-rows');
-  container.innerHTML = weightRows.map((row,i) => `
-    <div class="wgt-row" id="wr-${row.id}">
-      <span style="font-size:.8rem;color:var(--muted);min-width:22px;text-align:right">${i+1}.</span>
+  document.getElementById('wgt-rows').innerHTML = weightRows.map((row, i) => `
+    <div class="wgt-row">
+      <span style="font-size:.8rem;color:var(--muted);min-width:20px;text-align:right">${i+1}.</span>
       <input type="number" placeholder="gram" min="0.1" step="0.1" value="${row.grams}"
-        oninput="setRowGrams(${row.id},this.value)" style="width:110px">
+        oninput="setRowGrams(${row.id},this.value)" style="width:108px">
       <span class="wgt-unit">gram</span>
       <span class="wgt-sep">×</span>
       <span class="qty-lbl">Aantal:</span>
       <input type="number" class="qty-spin" min="1" max="100" step="1" value="${row.qty}"
         oninput="setRowQty(${row.id},this.value)">
-      ${weightRows.length > 1 ? `<button class="remove-row" onclick="removeWeightRow(${row.id})" title="Verwijderen">✕</button>` : ''}
+      ${weightRows.length > 1 ? `<button class="rm-row-btn" onclick="removeWeightRow(${row.id})">✕</button>` : ''}
     </div>`).join('');
 }
-function setRowGrams(id,v) {
-  const r = weightRows.find(r => r.id === id);
-  if (r) r.grams = v;
-  checkStep1();
-  calc();
+function setRowGrams(id, v) {
+  const r = weightRows.find(r => r.id === id); if (r) r.grams = v;
+  checkStep1(); calc();
 }
-function setRowQty(id,v) {
+function setRowQty(id, v) {
   const r = weightRows.find(r => r.id === id);
   if (r) r.qty = Math.min(100, Math.max(1, parseInt(v) || 1));
   calc();
 }
 function getTotalGrams() {
-  return weightRows.reduce((s,r) => {
-    const g = parseFloat(r.grams);
-    const q = parseInt(r.qty) || 1;
-    return s + (isNaN(g) || g <= 0 ? 0 : g*q);
+  return weightRows.reduce((s, r) => {
+    const g = parseFloat(r.grams), q = parseInt(r.qty) || 1;
+    return s + (isNaN(g) || g <= 0 ? 0 : g * q);
   }, 0);
 }
 function checkStep1() {
   const ok = weightRows.some(r => parseFloat(r.grams) > 0);
-  if (ok) tick('n1'); else untick('n1','1');
+  if (ok) tick('n1'); else untick('n1', '1');
 }
 
+// ══════════════════════════════════════════════
+//  Color qty
+// ══════════════════════════════════════════════
 function pickQty(n) {
-  colorQty = n;
-  slots = {};
-  for (let i=1;i<=4;i++) document.getElementById('qty'+i).classList.toggle('sel', i===n);
-  tick('n2');
-  renderSlots();
-  calc();
+  colorQty = n; slots = {}; slotTypeChoice = {};
+  for (let i = 1; i <= 4; i++) document.getElementById('qty'+i).classList.toggle('sel', i === n);
+  tick('n2'); renderSlots(); calc();
 }
 
+// ══════════════════════════════════════════════
+//  Filament info toggle
+// ══════════════════════════════════════════════
 function toggleFilInfo() {
   document.getElementById('fil-info-panel').classList.toggle('open');
 }
 
+// ══════════════════════════════════════════════
+//  Color slots – two-phase (type → color)
+// ══════════════════════════════════════════════
 function renderSlots() {
   const c = document.getElementById('color-slots');
   if (!colorQty) {
@@ -703,27 +710,30 @@ function renderSlots() {
     return;
   }
   let html = '';
-  for (let i=0; i<colorQty; i++) {
-    const label = colorQty===1 ? 'Filament' : `Kleur ${i+1}`;
+  for (let i = 0; i < colorQty; i++) {
+    const label = colorQty === 1 ? 'Filament' : `Kleur ${i+1}`;
     const chosen = slots[i] ? S.filaments.find(f => f.id === slots[i]) : null;
     const bc = BADGE_COLORS[i];
     let preview = '';
     if (chosen) {
       const hp = chosen.photoUrl && chosen.photoUrl.trim();
       preview = `<div class="fil-preview">
-        ${hp
-          ? `<img src="${chosen.photoUrl}" alt="${chosen.colorName}" onerror="this.style.display='none'">`
-          : `<div class="fil-preview-swatch" style="background:${chosen.colorHex}22"><div style="width:34px;height:34px;border-radius:50%;background:${chosen.colorHex};border:2px solid rgba(0,0,0,.12);margin:auto"></div></div>`
-        }
+        ${hp ? `<img src="${chosen.photoUrl}" alt="${chosen.colorName}" onerror="this.style.display='none'">` :
+          `<div class="fil-preview-swatch" style="background:${chosen.colorHex}22">
+            <div style="width:34px;height:34px;border-radius:50%;background:${chosen.colorHex};border:2px solid rgba(0,0,0,.12);margin:auto"></div>
+          </div>`}
         <div class="fil-preview-info">
           <div class="nm">${chosen.material} — ${chosen.colorName}</div>
-          <div class="sb">${chosen.outOfStock ? '<span style="color:#dc2626">⚠ Voorlopig niet op voorraad</span>' : '<span style="color:#16a34a">✓ Op voorraad</span>'}</div>
+          <div class="sb">${chosen.outOfStock
+            ? '<span style="color:#dc2626">⚠ Voorlopig niet op voorraad</span>'
+            : '<span style="color:#16a34a">✓ Op voorraad</span>'}</div>
         </div>
       </div>
       <div class="oos-warning${chosen.outOfStock?' show':''}">
         ⚠ Dit filament is voorlopig niet voorradig, dus de verwerking kan wat langer duren.
       </div>`;
     }
+    const slotContent = slotTypeChoice[i] ? buildColorGrid(i, slotTypeChoice[i]) : buildTypeGrid(i);
     html += `<div class="color-slot">
       <div class="slot-hdr">
         <div class="slot-badge" style="background:${bc}">${i+1}</div>
@@ -732,29 +742,42 @@ function renderSlots() {
           ? `<div class="slot-chosen"><div class="slot-chosen-dot" style="background:${chosen.colorHex}"></div>${chosen.material} ${chosen.colorName}</div>`
           : `<div class="slot-chosen" style="color:#94a3b8;font-style:italic">Nog niet gekozen</div>`}
       </div>
-      <div class="slot-body">
-        <div class="fil-pick-grid" id="grid-${i}">${buildGrid(i)}</div>
-        ${preview}
-      </div>
+      <div class="slot-body">${slotContent}${preview}</div>
     </div>`;
   }
   c.innerHTML = html;
-  for (let i=0; i<colorQty; i++) {
-    document.getElementById('grid-'+i).querySelectorAll('.fp-card').forEach(el => {
-      el.addEventListener('click', () => {
-        slots[parseInt(el.dataset.s)] = el.dataset.id;
-        checkStep3done();
-        renderSlots();
-        calc();
+  // Attach click events to color cards
+  for (let i = 0; i < colorQty; i++) {
+    const grid = document.getElementById('cgrid-'+i);
+    if (grid) {
+      grid.querySelectorAll('.fp-card').forEach(el => {
+        el.addEventListener('click', () => {
+          slots[parseInt(el.dataset.s)] = el.dataset.id;
+          checkStep3done(); renderSlots(); calc();
+        });
       });
-    });
+    }
   }
 }
-function buildGrid(si) {
-  if (!S.filaments.length) return '<div class="empty" style="padding:.5rem">Geen filamenten beschikbaar.</div>';
-  return S.filaments.map(f => {
-    const sel = slots[si] === f.id;
-    return `<div class="fp-card${sel?' sel':''}${f.outOfStock?' oos':''}" data-s="${si}" data-id="${f.id}">
+
+function buildTypeGrid(slotIdx) {
+  const materials = [...new Set(S.filaments.map(f => f.material))];
+  if (!materials.length) return '<div class="empty" style="padding:.5rem">Geen filamenten beschikbaar.</div>';
+  return `<div class="type-grid">${materials.map(mat => {
+    const clrs = S.filaments.filter(f => f.material === mat);
+    return `<div class="type-card" onclick="pickSlotType(${slotIdx},'${mat}')">
+      <div class="type-name">${mat}</div>
+      <div class="type-dots">${clrs.slice(0,7).map(c => `<div class="type-dot" style="background:${c.colorHex}"></div>`).join('')}</div>
+      <div class="type-cnt">${clrs.length} kleur${clrs.length !== 1 ? 'en' : ''}</div>
+    </div>`;
+  }).join('')}</div>`;
+}
+
+function buildColorGrid(slotIdx, material) {
+  const clrs = S.filaments.filter(f => f.material === material);
+  const cards = clrs.map(f => {
+    const sel = slots[slotIdx] === f.id;
+    return `<div class="fp-card${sel?' sel':''}${f.outOfStock?' oos':''}" data-s="${slotIdx}" data-id="${f.id}">
       ${sel ? '<div class="fp-check">✓</div>' : ''}
       <div class="fp-swatch" style="background:${f.colorHex}"></div>
       <div class="fp-mat">${f.material}</div>
@@ -762,39 +785,55 @@ function buildGrid(si) {
       <div class="fp-oos-badge">Niet op voorraad</div>
     </div>`;
   }).join('');
+  return `<button class="back-btn" onclick="backToTypeSelection(${slotIdx})">← Terug naar materiaaltype</button>
+    <div class="fil-pick-grid" id="cgrid-${slotIdx}">${cards}</div>`;
+}
+
+function pickSlotType(slotIdx, material) {
+  slotTypeChoice[slotIdx] = material;
+  if (slots[slotIdx]) {
+    const f = S.filaments.find(f => f.id === slots[slotIdx]);
+    if (f && f.material !== material) delete slots[slotIdx];
+  }
+  checkStep3done(); renderSlots(); calc();
+}
+function backToTypeSelection(slotIdx) {
+  delete slotTypeChoice[slotIdx];
+  renderSlots();
 }
 function checkStep3done() {
   const done = colorQty > 0 && Object.keys(slots).length === colorQty;
-  if (done) tick('n3'); else untick('n3','3');
+  if (done) tick('n3'); else untick('n3', '3');
 }
 
+// ══════════════════════════════════════════════
+//  Calculation
+// ══════════════════════════════════════════════
 function calc() {
   const totalGrams = getTotalGrams();
   const allDone = colorQty > 0 && Object.keys(slots).length === colorQty;
-  if (!allDone || totalGrams <= 0) {
-    document.getElementById('price-wrap').style.display = 'none';
-    return;
-  }
-  const selFils = Object.values(slots).map(id => S.filaments.find(f => f.id===id)).filter(Boolean);
-  const avgPpg = selFils.reduce((s,f) => s + f.pricePerKg/1000, 0) / selFils.length;
+  if (!allDone || totalGrams <= 0) { document.getElementById('price-wrap').style.display = 'none'; return; }
+
+  const selFils = Object.values(slots).map(id => S.filaments.find(f => f.id === id)).filter(Boolean);
+  const avgPpg = selFils.reduce((s, f) => s + f.pricePerKg / 1000, 0) / selFils.length;
   const colorSurcharge = colorQty > 1 ? (colorQty - 1) * 0.75 : 0;
   const raw = totalGrams * avgPpg + colorSurcharge;
   const minP = parseFloat(S.settings.minPrice) || 0;
   const final = Math.max(raw, minP);
   const isMin = final === minP && raw < minP;
-  document.getElementById('price-amt').textContent = `€ ${final.toFixed(2).replace('.',',')}`;
+
+  document.getElementById('price-amt').textContent = `€ ${final.toFixed(2).replace('.', ',')}`;
   document.getElementById('min-badge').style.display = isMin ? 'inline-block' : 'none';
-  let tbodyHtml = '';
-  let grandTotal = 0;
-  weightRows.forEach((row,i) => {
-    const g = parseFloat(row.grams);
-    const q = parseInt(row.qty) || 1;
+
+  // Summary
+  let tbodyHtml = '', grandTotal = 0;
+  weightRows.forEach((row, i) => {
+    const g = parseFloat(row.grams), q = parseInt(row.qty) || 1;
     if (isNaN(g) || g <= 0) return;
-    const rowTotal = g * q;
-    grandTotal += rowTotal;
+    const rowTotal = g * q; grandTotal += rowTotal;
     const filDesc = colorQty === 1
       ? (selFils[0] ? `${selFils[0].material} — ${selFils[0].colorName}` : '—')
-      : selFils.map((f,ci) => `<span class="sum-dot" style="background:${BADGE_COLORS[ci]}"></span>${f.material} ${f.colorName}`).join('<br>');
+      : selFils.map((f, ci) => `<span class="sum-dot" style="background:${BADGE_COLORS[ci]}"></span>${f.material} ${f.colorName}`).join('<br>');
     tbodyHtml += `<tr>
       <td style="text-align:center">${q}×</td>
       <td>${filDesc}</td>
@@ -802,70 +841,88 @@ function calc() {
       <td style="text-align:right">${rowTotal.toFixed(1)}g</td>
     </tr>`;
   });
-  if (colorSurcharge > 0) {
-    tbodyHtml += `<tr><td colspan="3" style="text-align:right;color:#94a3b8;font-size:.77rem">Meerkleurentoeslag (${colorQty-1}×)</td><td style="text-align:right;color:#94a3b8;font-size:.77rem">+ €${colorSurcharge.toFixed(2)}</td></tr>`;
-  }
+  if (colorSurcharge > 0) tbodyHtml += `<tr><td colspan="3" style="text-align:right;color:#64748b;font-size:.77rem">Meerkleurentoeslag (${colorQty-1}×)</td><td style="text-align:right;color:#94a3b8;font-size:.77rem">+€${colorSurcharge.toFixed(2)}</td></tr>`;
   document.getElementById('sum-tbody').innerHTML = tbodyHtml;
   document.getElementById('sum-total-wgt').textContent = grandTotal.toFixed(1) + 'g';
+
+  // Email
   const modelUrl = document.getElementById('model-url').value || '';
   const rowsDesc = weightRows.filter(r => parseFloat(r.grams) > 0)
-    .map((r,i) => `Component ${i+1}: ${r.grams}g × ${r.qty} exemplaar${r.qty>1?'en':''}`).join('\n');
-  const filDesc = selFils.map((f,i) => colorQty>1 ? `Kleur ${i+1}: ${f.material} ${f.colorName}` : `${f.material} ${f.colorName}`).join('\n');
+    .map((r, i) => `Component ${i+1}: ${r.grams}g × ${r.qty} exemplar${parseInt(r.qty) > 1 ? 'en' : ''}`).join('\n');
+  const filDesc = selFils.map((f, i) => colorQty > 1 ? `Kleur ${i+1}: ${f.material} ${f.colorName}` : `${f.material} ${f.colorName}`).join('\n');
   const colorLine = colorSurcharge > 0 ? `\nMeerkleurentoeslag (${colorQty} kleuren): +€${colorSurcharge.toFixed(2)}` : '';
   const body = encodeURIComponent(
 `Hallo,
+
 Kunt u de prijs van de offerte bevestigen om deze 3D prints te maken?
+
 ${filDesc}
 ${rowsDesc}
 Totaal gewicht: ${grandTotal.toFixed(1)}g${colorLine}
 Indicatieve prijs: €${final.toFixed(2)}
+
 URL Links naar de modellen:
 • ${modelUrl || '(vul hier de link in)'}
+
 Andere opmerkingen:
-Met vriendelijke groeten`
-  );
-  const subj = encodeURIComponent(`3D Print aanvraag — ${selFils.map(f=>f.material+' '+f.colorName).join(', ')}`);
-  document.getElementById('email-cta').href = `mailto:${S.settings.email || ''}?subject=${subj}&body=${body}`;
+
+
+Met vriendelijke groeten`);
+  const subj = encodeURIComponent(`3D Print aanvraag — ${selFils.map(f => f.material+' '+f.colorName).join(', ')}`);
+  document.getElementById('email-cta').href = `mailto:${S.settings.email||''}?subject=${subj}&body=${body}`;
   document.getElementById('price-wrap').style.display = 'block';
 }
 
+// ══════════════════════════════════════════════
+//  URL fetch
+// ══════════════════════════════════════════════
 async function fetchUrl() {
   const url = document.getElementById('model-url').value.trim();
   if (!url) return;
   const st = document.getElementById('url-st');
-  st.className = 'url-status loading';
-  st.style.display = 'block';
+  st.className = 'url-status loading'; st.style.display = 'block';
   st.textContent = '⏳ Pagina ophalen via proxy…';
   try {
     const r = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(url)}`);
-    const d = await r.json();
-    const html = d.contents || '';
+    const d = await r.json(); const html = d.contents || '';
     let w = null;
-    const jm = html.match(/"weight"\s*:\s*"?([0-9]+(?:\.[0-9]+)?)"?/i);
-    if (jm) w = parseFloat(jm[1]);
+    const jm = html.match(/"weight"\s*:\s*"?([0-9]+(?:\.[0-9]+)?)"?/i); if (jm) w = parseFloat(jm[1]);
     if (!w) { const dm = html.match(/data-weight="([0-9]+(?:\.[0-9]+)?)"/i); if (dm) w = parseFloat(dm[1]); }
     if (!w) { const pm = html.match(/(?:filament|weight|gram)[^0-9]*([0-9]+(?:\.[0-9]+)?)\s*g\b/i); if (pm) w = parseFloat(pm[1]); }
     if (!w) { const mm = html.match(/([0-9]+(?:\.[0-9]+)?)\s*g\b/i); if (mm && parseFloat(mm[1]) < 5000 && parseFloat(mm[1]) > 0) w = parseFloat(mm[1]); }
     if (w && w > 0 && w < 5000) {
-      weightRows[0].grams = w;
-      renderWeightRows();
-      st.className = 'url-status ok';
-      st.textContent = `✓ Gewicht gevonden: ${w}g`;
-      tick('n1');
-      calc();
+      weightRows[0].grams = w; renderWeightRows();
+      st.className = 'url-status ok'; st.textContent = `✓ Gewicht gevonden: ${w}g`;
+      tick('n1'); calc();
     } else {
-      st.className = 'url-status err';
-      st.textContent = '⚠ Gewicht niet automatisch gevonden. Vul het handmatig in.';
+      st.className = 'url-status err'; st.textContent = '⚠ Gewicht niet automatisch gevonden. Vul het handmatig in.';
     }
-  } catch (e) {
-    st.className = 'url-status err';
-    st.textContent = '⚠ Kon de pagina niet ophalen. Vul het gewicht handmatig in.';
+  } catch(e) {
+    st.className = 'url-status err'; st.textContent = '⚠ Kon de pagina niet ophalen. Vul het gewicht handmatig in.';
   }
 }
 
-function tick(id) { const el = document.getElementById(id); el.classList.add('done'); el.textContent = '✓'; }
-function untick(id,lbl) { const el = document.getElementById(id); el.classList.remove('done'); el.textContent = lbl; }
+// ══════════════════════════════════════════════
+//  Tick helpers
+// ══════════════════════════════════════════════
+function tick(id) { const e = document.getElementById(id); e.classList.add('done'); e.textContent = '✓'; }
+function untick(id, lbl) { const e = document.getElementById(id); e.classList.remove('done'); e.textContent = lbl; }
 
+// ══════════════════════════════════════════════
+//  HIER-link
+// ══════════════════════════════════════════════
+function updateHierLink() {
+  const el = document.getElementById('hier-link');
+  if (!el) return;
+  const email = S.settings.email || '';
+  const body = encodeURIComponent('Hallo,\n\nIk wil graag meer informatie over een 3D print project:\n\n[Beschrijf uw project hier]\n\nLink naar het model:\n• \n\nMet vriendelijke groeten');
+  const subj = encodeURIComponent('3D Print project aanvraag');
+  el.href = email ? `mailto:${email}?subject=${subj}&body=${body}` : `#`;
+}
+
+// ══════════════════════════════════════════════
+//  Admin – login
+// ══════════════════════════════════════════════
 function openAdmin() {
   if (authed) { showAdmin(); return; }
   document.getElementById('login-overlay').classList.add('open');
@@ -873,41 +930,13 @@ function openAdmin() {
 }
 function closeLogin() {
   document.getElementById('login-overlay').classList.remove('open');
-  document.getElementById('pwd-input').value='';
-  document.getElementById('pwd-err').style.display='none';
-  document.getElementById('pwd-err').textContent='Ongeldig wachtwoord. Probeer opnieuw.';
+  document.getElementById('pwd-input').value = '';
+  document.getElementById('pwd-err').style.display = 'none';
 }
-async function verifyAdminPassword(pwd) {
-  if (!configuredApiBaseUrl()) {
-    return { ok: true, warning: 'Adminpaneel lokaal geopend. Stel eerst je Cloudflare Worker URL in om wijzigingen echt naar GitHub op te slaan.' };
-  }
-  const res = await fetch(`${API_BASE_URL}/auth`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ password: pwd })
-  });
-  let payload = {};
-  try { payload = await res.json(); } catch (_) {}
-  if (!res.ok || !payload.ok) {
-    throw new Error(payload.error || 'Ongeldig wachtwoord.');
-  }
-  return payload;
-}
-async function doPwd() {
-  const pwd = document.getElementById('pwd-input').value;
-  const errEl = document.getElementById('pwd-err');
-  errEl.style.display = 'none';
-  try {
-    const result = await verifyAdminPassword(pwd);
-    adminPassword = pwd;
-    authed = true;
-    closeLogin();
-    showAdmin();
-    if (result.warning) alert(result.warning);
-  } catch (err) {
-    errEl.textContent = err.message || 'Ongeldig wachtwoord. Probeer opnieuw.';
-    errEl.style.display = 'block';
-  }
+function doPwd() {
+  if (document.getElementById('pwd-input').value === S.settings.password) {
+    authed = true; closeLogin(); showAdmin();
+  } else { document.getElementById('pwd-err').style.display = 'block'; }
 }
 function showAdmin() {
   document.getElementById('admin-wrap').classList.add('open');
@@ -915,13 +944,8 @@ function showAdmin() {
   document.getElementById('s-email').value = S.settings.email || '';
   document.getElementById('s-name').value = S.settings.name || '';
   document.getElementById('s-pwd').value = '';
-  document.getElementById('s-pwd').disabled = true;
-  document.getElementById('s-pwd').placeholder = 'Beheer dit in je Worker env var';
-  if (S.settings.bannerImg) {
-    document.getElementById('banner-preview').src = S.settings.bannerImg;
-    document.getElementById('banner-preview').classList.add('show');
-    document.getElementById('banner-current').textContent = 'Huidige bannerafbeelding geladen';
-  }
+  const saved = localStorage.getItem('3dp_banner');
+  if (saved) { document.getElementById('banner-preview').src = saved; document.getElementById('banner-preview').classList.add('show'); }
   renderAdminList();
 }
 function closeAdmin() { document.getElementById('admin-wrap').classList.remove('open'); }
@@ -931,37 +955,43 @@ async function saveSettings() {
   S.settings.minPrice = parseFloat(document.getElementById('s-min').value) || 2.50;
   S.settings.email = document.getElementById('s-email').value.trim();
   S.settings.name = document.getElementById('s-name').value.trim();
+  const np = document.getElementById('s-pwd').value;
+  if (np) S.settings.password = np;
+  await saveData();
   document.getElementById('header-name-el').textContent = S.settings.name || '';
-  applyBanner();
-  try {
-    await persistStateToGithub('Instellingen bijgewerkt via adminpaneel');
-    alert('✓ Instellingen opgeslagen in GitHub!');
-  } catch (err) {
-    alert('Opslaan mislukt: ' + err.message);
-  }
+  updateHierLink();
+  showStatus('settings-status', '✓ Opgeslagen');
 }
 
-function toggleOosSw() {
-  const sw = document.getElementById('oos-sw');
-  const lbl = document.getElementById('oos-sw-lbl');
-  const inp = document.getElementById('f-oos');
-  const isOn = sw.classList.toggle('on');
-  lbl.textContent = isOn ? 'Op voorraad' : 'Niet op voorraad';
-  inp.value = isOn ? '0' : '1';
+function showStatus(id, msg, isErr) {
+  const el = document.getElementById(id);
+  el.textContent = msg;
+  el.className = 'save-status show' + (isErr ? ' err' : '');
+  setTimeout(() => { el.className = 'save-status'; }, 3000);
 }
 
+// ══════════════════════════════════════════════
+//  Admin – filament list with drag-to-reorder
+// ══════════════════════════════════════════════
 function renderAdminList() {
   const list = document.getElementById('fil-list');
   if (!S.filaments.length) {
     list.innerHTML = '<div class="empty"><div class="empty-icon">🧵</div>Nog geen filamenten toegevoegd.</div>';
     return;
   }
-  list.innerHTML = S.filaments.map(f => `
-    <div class="fil-item">
+  list.innerHTML = S.filaments.map((f, idx) => `
+    <div class="fil-item" draggable="true"
+      ondragstart="filDragStart(event,${idx})"
+      ondragend="filDragEnd(event)"
+      ondragover="filDragOver(event)"
+      ondrop="filDrop(event,${idx})">
+      <div class="drag-handle" title="Versleep om volgorde te wijzigen">≡</div>
       <div class="fil-sw" style="background:${f.colorHex}"></div>
       <div class="fil-info">
         <div class="fil-nm">${f.material} — ${f.colorName}</div>
-        <div class="fil-mt">€${Number(f.pricePerKg).toFixed(2)}/kg${f.photoUrl?' · 📷':''}${f.outOfStock?' · <span style="color:#dc2626">Niet op voorraad</span>':' · <span style="color:#16a34a">Op voorraad</span>'}</div>
+        <div class="fil-mt">€${f.pricePerKg.toFixed(2)}/kg${f.photoUrl?' · 📷':''}${f.outOfStock
+          ?' · <span style="color:#dc2626">Niet op voorraad</span>'
+          :' · <span style="color:#16a34a">Op voorraad</span>'}</div>
       </div>
       <div class="fil-acts">
         <button class="oos-toggle ${f.outOfStock?'out-stock':'in-stock'}" onclick="toggleStock('${f.id}')">
@@ -972,69 +1002,72 @@ function renderAdminList() {
       </div>
     </div>`).join('');
 }
+
+function filDragStart(e, idx) {
+  dragSrcIdx = idx;
+  e.dataTransfer.effectAllowed = 'move';
+  setTimeout(() => { if(e.target) e.target.style.opacity = '0.45'; }, 0);
+}
+function filDragEnd(e) { if(e.target) e.target.style.opacity = '1'; dragSrcIdx = null; }
+function filDragOver(e) { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; e.currentTarget.classList.add('drag-over'); }
+async function filDrop(e, idx) {
+  e.preventDefault();
+  document.querySelectorAll('.fil-item').forEach(el => el.classList.remove('drag-over'));
+  if (dragSrcIdx === null || dragSrcIdx === idx) return;
+  const arr = [...S.filaments];
+  const [item] = arr.splice(dragSrcIdx, 1);
+  arr.splice(idx, 0, item);
+  S.filaments = arr; dragSrcIdx = null;
+  await saveData(); renderAdminList();
+}
+
+// ══════════════════════════════════════════════
+//  Admin – OOS toggle
+// ══════════════════════════════════════════════
 async function toggleStock(id) {
   const f = S.filaments.find(f => f.id === id);
   if (!f) return;
-  const prev = f.outOfStock;
   f.outOfStock = !f.outOfStock;
-  renderAdminList();
-  renderSlots();
-  calc();
-  try {
-    await persistStateToGithub(`Voorraadstatus aangepast voor ${f.material} ${f.colorName}`);
-  } catch (err) {
-    f.outOfStock = prev;
-    renderAdminList();
-    renderSlots();
-    calc();
-    alert('Opslaan mislukt: ' + err.message);
-  }
+  await saveData(); renderAdminList();
 }
+function toggleOosSw() {
+  const sw = document.getElementById('oos-sw');
+  const isOn = sw.classList.toggle('on');
+  document.getElementById('oos-sw-lbl').textContent = isOn ? 'Op voorraad' : 'Niet op voorraad';
+  document.getElementById('f-oos').value = isOn ? '0' : '1';
+}
+
+// ══════════════════════════════════════════════
+//  Admin – form
+// ══════════════════════════════════════════════
 function updatePer50() {
   const v = parseFloat(document.getElementById('f-pkg').value);
   document.getElementById('per50-preview').textContent = isNaN(v) ? '0,00' : (v/20).toFixed(2).replace('.',',');
 }
 function syncHex() { document.getElementById('f-chex').value = document.getElementById('f-cpick').value; }
-function syncPick() {
-  const v = document.getElementById('f-chex').value;
-  if (/^#[0-9a-f]{6}$/i.test(v)) document.getElementById('f-cpick').value = v;
-}
+function syncPick() { const v = document.getElementById('f-chex').value; if(/^#[0-9a-f]{6}$/i.test(v)) document.getElementById('f-cpick').value = v; }
 
 async function saveFil() {
   const mat = document.getElementById('f-mat').value.trim().toUpperCase();
   const cname = document.getElementById('f-cname').value.trim();
-  const chex = (document.getElementById('f-chex').value.trim() || document.getElementById('f-cpick').value).trim();
+  const chex = document.getElementById('f-chex').value.trim() || document.getElementById('f-cpick').value;
   const ppkg = parseFloat(document.getElementById('f-pkg').value);
   const photo = document.getElementById('f-photo').value.trim();
   const oos = document.getElementById('f-oos').value === '1';
   if (!mat || !cname || isNaN(ppkg) || ppkg < 0) { alert('Vul alle verplichte velden in.'); return; }
   const eid = document.getElementById('edit-id').value;
-  const newFil = { id: eid || Date.now().toString(), material: mat, colorName: cname, colorHex: chex, pricePerKg: ppkg, photoUrl: photo, outOfStock: oos };
-  const backup = JSON.parse(JSON.stringify(S.filaments));
   if (eid) {
     const i = S.filaments.findIndex(f => f.id === eid);
-    if (i >= 0) S.filaments[i] = newFil;
+    if (i >= 0) S.filaments[i] = { id:eid, material:mat, colorName:cname, colorHex:chex, pricePerKg:ppkg, photoUrl:photo, outOfStock:oos };
   } else {
-    S.filaments.push(newFil);
+    S.filaments.push({ id: Date.now().toString(), material:mat, colorName:cname, colorHex:chex, pricePerKg:ppkg, photoUrl:photo, outOfStock:oos });
   }
-  renderAdminList();
-  renderSlots();
-  calc();
-  try {
-    await persistStateToGithub(eid ? `Filament bijgewerkt: ${mat} ${cname}` : `Filament toegevoegd: ${mat} ${cname}`);
-    cancelEdit();
-    alert('✓ Filament opgeslagen in GitHub!');
-  } catch (err) {
-    S.filaments = backup;
-    renderAdminList();
-    renderSlots();
-    calc();
-    alert('Opslaan mislukt: ' + err.message);
-  }
+  await saveData(); cancelEdit(); renderAdminList();
+  showStatus('fil-status', '✓ Opgeslagen');
 }
+
 function editFil(id) {
-  const f = S.filaments.find(f => f.id === id);
-  if (!f) return;
+  const f = S.filaments.find(f => f.id === id); if (!f) return;
   document.getElementById('edit-id').value = f.id;
   document.getElementById('f-mat').value = f.material;
   document.getElementById('f-cname').value = f.colorName;
@@ -1044,31 +1077,18 @@ function editFil(id) {
   document.getElementById('per50-preview').textContent = (f.pricePerKg/20).toFixed(2).replace('.',',');
   document.getElementById('f-photo').value = f.photoUrl || '';
   const sw = document.getElementById('oos-sw');
-  const lbl = document.getElementById('oos-sw-lbl');
-  if (f.outOfStock) { sw.classList.remove('on'); lbl.textContent = 'Niet op voorraad'; document.getElementById('f-oos').value = '1'; }
-  else { sw.classList.add('on'); lbl.textContent = 'Op voorraad'; document.getElementById('f-oos').value = '0'; }
+  if (f.outOfStock) { sw.classList.remove('on'); document.getElementById('oos-sw-lbl').textContent='Niet op voorraad'; document.getElementById('f-oos').value='1'; }
+  else { sw.classList.add('on'); document.getElementById('oos-sw-lbl').textContent='Op voorraad'; document.getElementById('f-oos').value='0'; }
   document.getElementById('form-title').textContent = '✏️ Filament bewerken';
-  document.querySelector('.add-form').scrollIntoView({behavior:'smooth', block:'nearest'});
+  document.querySelector('.add-form').scrollIntoView({ behavior:'smooth', block:'nearest' });
 }
+
 async function delFil(id) {
-  const f = S.filaments.find(x => x.id === id);
-  if (!f) return;
   if (!confirm('Dit filament verwijderen?')) return;
-  const backup = JSON.parse(JSON.stringify(S.filaments));
-  S.filaments = S.filaments.filter(x => x.id !== id);
-  renderAdminList();
-  renderSlots();
-  calc();
-  try {
-    await persistStateToGithub(`Filament verwijderd: ${f.material} ${f.colorName}`);
-  } catch (err) {
-    S.filaments = backup;
-    renderAdminList();
-    renderSlots();
-    calc();
-    alert('Opslaan mislukt: ' + err.message);
-  }
+  S.filaments = S.filaments.filter(f => f.id !== id);
+  await saveData(); renderAdminList();
 }
+
 function cancelEdit() {
   document.getElementById('edit-id').value = '';
   document.getElementById('f-mat').value = '';
@@ -1079,27 +1099,24 @@ function cancelEdit() {
   document.getElementById('per50-preview').textContent = '0,00';
   document.getElementById('f-photo').value = '';
   const sw = document.getElementById('oos-sw');
-  sw.classList.add('on');
-  document.getElementById('oos-sw-lbl').textContent = 'Op voorraad';
-  document.getElementById('f-oos').value = '0';
+  sw.classList.add('on'); document.getElementById('oos-sw-lbl').textContent='Op voorraad'; document.getElementById('f-oos').value='0';
   document.getElementById('form-title').textContent = '➕ Filament toevoegen';
 }
 
+// ══════════════════════════════════════════════
+//  Init
+// ══════════════════════════════════════════════
 async function init() {
-  await load();
+  document.getElementById('loading-overlay').style.display = 'flex';
+  await loadData();
+  document.getElementById('loading-overlay').style.display = 'none';
   initWeightRows();
-  document.getElementById('header-name-el').textContent = S.settings.name || '';
   applyBanner();
-  const pwdField = document.getElementById('s-pwd');
-  if (pwdField) {
-    pwdField.disabled = true;
-    pwdField.placeholder = 'Beheer dit in je Worker env var';
-    const label = pwdField.closest('.f-field')?.querySelector('label');
-    if (label) label.textContent = 'Admin wachtwoord (via Worker)';
-  }
+  document.getElementById('header-name-el').textContent = S.settings.name || '';
+  updateHierLink();
 }
+
 init();
 </script>
-
 </body>
 </html>
